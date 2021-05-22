@@ -1,0 +1,55 @@
+extends layout 
+block content
+    section.container.mt-5.my-2
+        .row.py-3.justify-content-center.border.border-success.bg-light.shadow.rounded.mx-3
+            input#idUserCurrent(type="hidden" value=`${thisUser._id}` )
+            .col-md-4.my-3
+                .avatar.w-100.shadow
+                    img(src="https://znews-photo.zadn.vn/w660/Uploaded/qhj_yvobvhfwbv/2018_07_18/Nguyen_Huy_Binh1.jpg" alt="hinh" srcset="" width='100%')
+            .col-md-8
+                form.info#if
+                    .row
+                        .col
+                            label(for="fullname") Fullname:
+                            input.form-control#fullname(type="text" placeholder="First name" readonly value=`${thisUser.fullname?thisUser.fullname:''}`)
+                        //- .col
+                        //-     label(for) Last Name:
+                        //-     input.form-control(type="text" placeholder="Last name")
+                    .form-group.row.mt-3
+                        label.col-sm-4.col-form-label(for="birthday") Birth day:
+                        .col-sm-8
+                            input.form-control#birthday(type="date" placeholder="dd/mm/yyyy" min="01/04/2017" max="31/12/2100" readonly, value=`${thisUser.birthDay?(thisUser.birthDay).toLocaleDateString():(new Date()).toLocaleDateString()}`)
+                    .form-group.row.mt-3
+                        label.col-sm-4.col-form-label(for="email") Email :
+                        .col-sm-8
+                            input.form-control#email(type="text", readonly, value=`${thisUser.email?thisUser.email:''}`)
+                    .form-group.row
+                        label.col-sm-4.col-form-label(for="sdt") Phone Number :
+                        .col-sm-8
+                            input.form-control#sdt(type="text" value=`${thisUser.sdt?thisUser.sdt:'+84'}` readonly)
+                    .row
+                        legend.col-form-label.col-sm-4.pt-0 Gender :
+                        .col-sm-8.d-flex
+                            .form-check.mr-4
+                                if thisUser.gender==='male' && thisUser.gender!==''
+                                    input.form-check-input#male(type="radio" name="male" value="male" checkeds disabled)
+                                    label.form-check-label(for="male") Male
+                                else 
+                                    input.form-check-input#male(type="radio" name="male" value="male" disabled)
+                                    label.form-check-label(for="male") Male
+                            .form-check
+                                if thisUser.gender==='female' && thisUser.gender!==''
+                                    input.form-check-input#female(type="radio" name="female" value="female" checked disabled)
+                                    label.form-check-label(for="female") Female
+                                else 
+                                    input.form-check-input#female(type="radio" name="female" value="female" disabled)
+                                    label.form-check-label(for="female") Female
+                    .form-group.row.mt-3
+                        label.col-sm-4.col-form-label(for="address") Address :
+                        .col-sm-8
+                            input.form-control#address(type="text", readonly, value=value=`${thisUser.address?thisUser.address:''}`)
+                    .row 
+                        .col.d-flex.justify-content-around
+                            button.btn.btn-success(type="button", edit) Edit
+                            button.btn.btn-danger(type="button", save, disabled) Save
+                            button.btn.btn-danger(type="button", cancel, disabled) Cancel

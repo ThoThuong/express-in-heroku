@@ -1,0 +1,85 @@
+extends layout 
+block content
+
+    if data.tsp
+        section.container.p-5.my-2.bg-light.shadow.rounded.pb-5.mb-5#print-area
+            .row.bg-light.pb-5.mb-5
+                .col-12
+                    .row
+                        .col-12.d-flex.justify-content-end.my-3
+                            button.btn.btn-success.noPrint#btn-print-no-print(type="button" onclick="printDiv(\'print-area\')") Print
+                                i.fas.fa-print.ml-3
+
+                        .col-12.justify-content-left
+                            table.table.table-hover
+                                thead.text-center
+                                    tr 
+                                        th(colspan=2)
+                                            h4 Statistics sheet
+                                    tr 
+                                        th(colspan=2)
+                                            h5 Statistics of total amount of consumption from  #{data.dfr} to #{data.dto}
+                                tbody
+                                    tr
+                                        th(scope="row") Full name:
+                                        td=data.fn
+                                    tr
+                                        th(scope="row") Email:
+                                        td=data.e
+                                    tr
+                                        th(scope="row") Phone number:
+                                        td=data.pnb
+                                    tr
+                                        th(scope="row") Quantity invoice:
+                                        td=data.qt
+                                    tr
+                                        th(scope="row") Date From:
+                                        td
+                                            span#df=data.dfr
+                                    tr
+                                        th(scope="row") Date To:
+                                        td
+                                            span#dt=data.dto
+                                    tr
+                                        th(scope="row") Total amount of consumption:
+                                        td=data.tsp
+
+            each val in  data.fr
+                .row.py-3.justify-content-center.border.border-success.bg-light.shadow.rounded.mb-3.invoice-item(id=`inv-item-${val._id}`)
+                    .col-md-4
+                        .avatar.w-100#slide-list-img-result
+                            .owl-carousel.pb-5.text-center.owl-theme
+                                each img in val.imageResult
+                                    .img-result
+                                        img(src=`${img}` alt="hinh" srcset="" width='100%')
+                    .col-md-8
+                        .content
+                            table.table.table-bordered.mx-2
+                                tbody
+                                tr
+                                    th.w-25(scope="row") Address:
+                                    td= val.address
+                                tr
+                                    th(scope="row") Product :
+                                    td(colspan="2")
+                                        each item in val.items
+                                            p= item
+                                tr
+                                    th(scope="row ") Total:
+                                    td= val.total
+                                tr
+                                    th(scope="row") Date:
+                                    - var dFM = (val.datetime).toLocaleDateString()
+                                    td(colspan="2")= dFM
+
+    else
+        section.container.mt-5.my-2.bg-light.shadow.rounded
+            .row.bg-light.pb-5.mb-5
+                .col-12
+                    h1 You don't have any invoices
+
+
+
+
+
+

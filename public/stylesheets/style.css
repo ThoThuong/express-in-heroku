@@ -1,0 +1,269 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,200;1,200&display=swap');
+
+body {
+  font: 15px "Roboto Mono", "Lucida Grande",
+    Helvetica,
+    Arial,
+    sans-serif,
+    monospace;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+select {
+  font-weight: 600 !important;
+  line-height: 1.2;
+}
+
+a {
+  color: #00B7FF;
+}
+
+/* p {
+  color: red;
+} */
+
+div#log {
+  font-size: 1.5rem;
+}
+
+#label-on-process {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #1bda4a;
+}
+
+progress {
+  width: 100%;
+  /* background-color: #1bda4a; */
+}
+
+#wraper {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  backdrop-filter: blur(3px);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-left: 1px solid rgba(255, 255, 255, 0.5);
+  transition: 1s cubic-bezier(0.39, 0.575, 0.565, 1);
+}
+
+#iconSpin {
+  font-size: 1.5rem;
+}
+
+div#log>pre {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  border: 1px solid darkgray;
+  padding: 0 2rem;
+}
+
+.logout {
+  background-color: #41bd5e !important;
+}
+
+.owl-stage {
+  display: flex;
+  align-items: center;
+}
+
+div#sub-image-extracted {
+  padding: 1rem 0.3rem;
+  /* background-color: #7ac37a; */
+}
+
+.owl-item.active {
+  margin: 0 0.5rem;
+}
+
+.owl-carousel.d-flex.owl-theme.owl-loaded.owl-drag {
+  justify-content: center;
+}
+
+/* .owl-item.active{
+  width: 100rem!important;
+} */
+
+button.w3-button.w3-circle {
+  margin: 0 0.5rem;
+}
+
+nav.navbar.navbar-light.bg-light.justify-content-between.bg-success.shadow-none.rounded.mb-3 {
+  background-color: #4ac86a !important;
+  color: aliceblue;
+}
+
+#homePage:hover {
+  cursor: pointer;
+}
+
+#homePage span {
+  margin: 0 0 0 0.5em;
+
+}
+
+button.w3-button:hover {
+  border-radius: 0.2em;
+  /* background-color: rgba(212, 116, 26, 0.986)!important; */
+  background-color: aliceblue !important;
+  color: #1bda4a !important;
+}
+
+#result p {
+  font-size: 1rem;
+}
+
+.real-box {
+  display: flex;
+  border: 0.1rem solid #53d553;
+  padding: 1rem;
+  flex-direction: row;
+}
+
+.d-flex.flex-direction-row.justify-content-around>div {
+  margin: 1rem;
+}
+
+.d-flex.flex-row.justify-content-center-px-2>div {
+  padding: 0 1rem;
+}
+
+.d-flex.flex-row.justify-content-center-px-2>div>span {
+  margin: 0 0 1.5rem 0
+}
+
+div#result>div {
+  display: flex;
+  padding: 0 1rem
+}
+
+div#result>div {
+  padding: 0 1rem;
+}
+
+.title-result {
+  /* margin: 0 4.5rem 0 0; */
+  width: 10%;
+}
+
+.title-result>h4 {
+  padding: 0;
+  margin: 0;
+}
+
+.customCARO {
+  background: #8bdd95;
+  border-radius: 1rem;
+}
+
+.owl-carousel .owl-nav.disabled,
+.owl-carousel .owl-dots.disabled {
+  display: block;
+}
+
+button.owl-next>span,
+button.owl-prev>span {
+  font-size: 2rem !important;
+  border: 1px solid #3acd3a;
+  width: 4rem;
+  display: block;
+  text-align: center;
+  background: #8fdfa0;
+  color: white;
+  font-weight: 700;
+  border-radius: 1rem;
+}
+
+.owl-theme .owl-nav [class*=owl-]:hover {
+  background: none !important;
+  color: green;
+  text-decoration: none;
+}
+
+#slide-img-box>div {
+  display: flex;
+  flex-direction: column;
+}
+
+/* button.owl-dot.active {
+  position: relative;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: rgb(124, 113, 113);
+  border-radius: 50%;
+}
+
+button.owl-dot.active:before {
+  position: absolute;
+  content: '';
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  color: red;
+} */
+
+.owl-stage-outer {
+  margin: 0 0 0.5rem 0;
+}
+
+.invoice-item {
+  margin: 0 1rem;
+}
+
+h3 {
+  font-weight: 500;
+}
+
+thead#header-result {
+  text-align: center;
+}
+
+/* .custome-pagination-li {
+ 
+} */
+
+.custome-pagination {
+  background-color: #3acd3a !important;
+  color: #FFFFFFFF !important;
+  font-weight: 600;
+  border-color: #FFFFFFFF !important;
+  margin: 0 0.1rem;
+  border-radius: 0.3rem;
+}
+
+.page-item.disabled>.page-link {
+  background-color: #a68d8d !important;
+}
+
+.page-item.active>.page-link {
+  border: 0.1rem solid #3acd3a !important;
+  background-color: #FFFFFFFF !important;
+  color: #272525 !important;
+  border-radius: 0.3rem;
+}
+
+#footer-extract {
+  background-color: #4ac86a !important;
+
+}
+
+tr {
+  font-weight: 600;
+}
+
+#sati {
+  position: absolute;
+  transform: translateX(100%);
+}
+
+.dcalendarpicker .dudp__wrapper {
+  bottom: 25% !important;
+}
+
+/* #btn-print-no-print {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 2% 2% 0 0;
+} */

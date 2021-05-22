@@ -1,0 +1,144 @@
+extends layout 
+block content
+
+    section.container.mt-5.my-2.bg-light.shadow.rounded
+        .row.bg-light.pb-5.mb-5
+            .col-12
+                .row
+                    .col-md-3.justify-content-center
+                        h3 List invoice - Total 
+                            span.badge.badge-secondary #{totalInvoice}
+                    .col-md-9.d-flex.align-items-center.justify-content-center.flex-column.bd-highlight
+                        h3 Statistical by date
+                        form
+                            .form-group
+                                label(for="datetime-statistical") Select the date you want to record
+                                input#date-sati.form-control(type="text" aria-describedby="dateHelp" placeholder="Select the date you want to record")
+                                small#dateHelp.form-text.text-muted We'll never share your data with anyone else.
+                                #logger
+                                    span Logger:
+                                    #loggerTxt
+                            button.btn.btn-outline-secondary.font-weight-bold#sati(type="btn" disabled) Statistics 
+
+        if list.length>0
+            each val in  list
+                div.row.py-3.justify-content-center.border.border-success.bg-light.shadow.rounded.mb-3.invoice-item(id=`inv-item-${val._id}`)
+                    .col-md-4
+                        .avatar.w-100#slide-list-img-result
+                            .owl-carousel.pb-5.text-center.owl-theme
+                                each img in val.imageResult
+                                    .img-result
+                                        img(src=`${img}` alt="hinh" srcset="" width='100%')
+                    .col-md-8
+                        .content
+                            table.table.table-bordered.mx-2
+                                tbody
+                                tr
+                                    th.w-25(scope="row") Address:
+                                    td= val.address
+                                tr
+                                    th(scope="row") Product :
+                                    td(colspan="2")
+                                        each item in val.items
+                                            p= item
+                                tr
+                                    th(scope="row ") Total:
+                                    td= val.total
+                                tr
+                                    th(scope="row") Date:
+                                    - var dFM = (val.datetime).toLocaleDateString()
+                                    td(colspan="2")= dFM
+                    .col-12 
+                        .modify-invoice.d-flex.justify-content-around.w-100
+                            button.btn.btn-danger.delete-item( type="button", idDel=`${val._id}`) Delete
+                            button.btn.btn-warning(type="button" data-toggle="modal" data-target=`#modal-item-${val._id}`) Edit
+                            .modal.fade(id=`modal-item-${val._id}` tabindex="-1" role="dialog" aria-labelledby=`modal-title-${val._id}` aria-hidden="true")
+                                .modal-dialog.modal-xl(role="document")
+                                    .modal-content
+                                        .modal-header
+                                            h5.modal-title(id=`modal-title-${val._id}`) Enter correct information on your bill
+                                            button.close(type="button" data-dismiss="modal" aria-label="Close")
+                                            span(aria-hidden="true") ×
+                                        .modal-body
+                                            .row
+                                                .col-md-4
+                                                    .avatar.w-100#slide-list-img-result
+                                                        .owl-carousel.pb-5.text-center.owl-theme
+                                                            each img in val.imageResult
+                                                                .img-result
+                                                                    img(src=`${img}` alt="hinh" srcset="" width='100%')
+                                                .col-md-8
+                                                    form
+                                                        .form-group
+                                                            label.col-form-label(for=`address-item-${val._id}`) Address:
+                                                            input.form-control(id=`address-item-${val._id}` type="text" value=`${val.address}`)
+                                                        .form-group
+
+                                                            label.col-form-label(for=`datetime-item-${val._id}`) datetime:
+                                                            input.update-datetime.form-control(id=`datetime-item-${val._id}` type="text" data-theme="green" value=`${val.datetime}` )
+                                                        div.form-group(id=`product-form-${val._id}`)
+                                                            form
+                                                                each product, index in val.items
+                                                                    .form-group
+                                                                        label.col-form-label(for=`product-item-${index}-${val._id}`) product-#{index+1}:
+                                                                            textarea.form-control(id=`product-item-${index}-${val._id}`)= product
+                                                        .form-group
+                                                            label.col-form-label(for=`total-item-${val._id}`) Total:
+                                                            input.form-control(id=`total-item-${val._id}` type="text" value=`${val.total}`)
+
+
+                                        .modal-footer
+                                            button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
+                                            button.btn.btn-primary(class='save-item-modal' type="button"  idInvoice=`${val._id}` ) Save changes
+        else 
+            h3 Not fonud invoice on this page.Switch another page.
+        //- <!-- pagination -->
+        .row
+            if pages > 0
+                nav.mx-auto
+                    ul.pagination(style="margin-top: 2rem; color:green!important;")
+                        //- <!-- FIRST ITEM -->  
+                        if current == 1
+                            li.page-item.disabled.custome-pagination-li
+                                a.page-link.text-success.custome-pagination(href="/api/list-invoice/1") First
+                        else 
+                            li.page-item.custome-pagination-li
+                                a.page-link.custome-pagination(href="/api/list-invoice/1") First
+                        //- <!-- ITEMS  -->
+                        - var i = (Number(current) > 3 ? Number(current) - 2 : 1)
+                        if (i !== 1) 
+                            li.page-item.disabled.custome-pagination-li
+                                a.page-link.custome-pagination(href=`#`) ...
+                        while i <= (Number(current) + 2) && i <= pages
+                            if (i == current)
+                                li.page-item.active.custome-pagination-li
+                                    a.page-link.custome-pagination(href=`/api/list-invoice/${i}/`)=i
+                            else
+                                li.page-item.custome-pagination-li
+                                    a.page-link.custome-pagination(href=`/api/list-invoice/${i}/`)=i
+                            - i++
+
+                        if (i == Number(current) + 2 && i < pages)
+                            li.page-item.disabled.custome-pagination-li
+                                a.page-link.custome-pagination(href="#") ...
+
+
+                        //- <!-- LAST ITEM -->
+                        if current == pages
+                            //-  Nếu số current( chỉ số phân trang ) là 6 và tổng số page là 6 thì Last bị disabled
+                            li.page-item.disabled.custome-pagination-li
+                                a.page-link.custome-pagination(href="#").
+                                    Last
+                        else
+
+                            li.page-item.custome-pagination-li
+                                a.page-link.custome-pagination(href=`/api/list-invoice/${pages}`).
+                                    Last
+
+
+
+
+
+
+
+

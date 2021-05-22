@@ -1,0 +1,64 @@
+extends layout 
+block content
+    h1 ok pagination
+    .container.mt-5
+        .row
+            each val in products
+                .col-md-3
+                    .p-1
+                        .card
+                            img.card-img-top(src=`${val.cover}` alt='abc')
+                            .card-body
+                                h4.card-title=val.name 
+                                p.card-text=val.category 
+                                p.card-text=val.price
+
+
+
+
+
+
+        //- <!-- pagination -->
+        .row
+            if pages > 0
+                nav.mx-auto
+                    ul.pagination(style="margin-top: 2rem; color:green!important;")
+                        //- <!-- FIRST ITEM -->  
+                        if current == 1
+                            li.page-item.disabled.custome-pagination-li
+                                a.page-link.text-success.custome-pagination(href="/test/page/1") First
+                        else 
+                            li.page-item.custome-pagination-li
+                                a.page-link.custome-pagination(href="/test/page/1") First
+                        //- <!-- ITEMS  -->
+                        - var i = (Number(current) > 3 ? Number(current) - 2 : 1)
+                        if (i !== 1) 
+                            li.page-item.disabled.custome-pagination-li
+                                a.page-link.custome-pagination(href=`#`) ...
+                        while i <= (Number(current) + 2) && i <= pages
+                            if (i == current)
+                                li.page-item.active.custome-pagination-li
+                                    a.page-link.custome-pagination(href=`/test/page/${i}/`)=i
+                            else
+                                li.page-item.custome-pagination-li
+                                    a.page-link.custome-pagination(href=`/test/page/${i}/`)=i
+                            - i++
+
+                        if (i == Number(current) + 2 && i < pages)
+                            li.page-item.disabled.custome-pagination-li
+                                a.page-link.custome-pagination(href="#") ...
+
+
+                        //- <!-- LAST ITEM -->
+                        if current == pages
+                            //-  Nếu số current( chỉ số phân trang ) là 6 và tổng số page là 6 thì Last bị disabled
+                            li.page-item.disabled.custome-pagination-li
+                                a.page-link.custome-pagination(href="#").
+                                    Last
+                        else
+
+                            li.page-item.custome-pagination-li
+                                a.page-link.custome-pagination(href=`/test/page/${pages}`).
+                                    Last
+
+
