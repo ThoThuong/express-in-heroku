@@ -90,10 +90,12 @@ $(function () {
 
         // origin url 'http://127.0.0.1:5000/api/test'
         // 192.168.1.5
+        //'https://nobugnocode.com/api/test',
+        //'http://127.0.0.1:5000/api/test',
 
         let data = await $.ajax({
             type: "POST",
-            url: 'http://127.0.0.1:5000/api/test',
+            url: 'https://nobugnocode.com/api/test',
             data: emitData,
             contentType: false,
             processData: false,
