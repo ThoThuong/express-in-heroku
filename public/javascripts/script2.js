@@ -92,10 +92,11 @@ $(function () {
         // 192.168.1.5
         //'https://nobugnocode.com/api/test',
         //'http://127.0.0.1:5000/api/test',
+        //'http://nobugnocode.com/api/test',
 
         let data = await $.ajax({
             type: "POST",
-            url: 'https://nobugnocode.com/api/test',
+            url: 'http://nobugnocode.com/api/test',
             data: emitData,
             contentType: false,
             processData: false,
