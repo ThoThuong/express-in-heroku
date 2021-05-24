@@ -96,7 +96,7 @@ $(function () {
 
         let data = await $.ajax({
             type: "POST",
-            url: 'http://nobugnocode.com/api/test',
+            url: 'https://nobugnocode.com/api/test',
             data: emitData,
             contentType: false,
             processData: false,
