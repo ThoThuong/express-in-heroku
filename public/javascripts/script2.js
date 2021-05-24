@@ -20,179 +20,184 @@ $(function () {
     alertify.set('notifier', 'position', 'top-right');
 
     $(document).on('change', '#file-1', async (e) => {
-        /*
-        // let filename1 = $('input[type=file]').val().split('\\').pop();
-        // let filename2 = $('input[type=file]').val().replace(/C:\\fakepath\\/i, '')
-        */
-        $('#file-1').prop('disabled', true);
-        let emitData = new FormData();
-        $('#sub-image-extracted').empty();
-        if (e.target.files.length > 1) {
-            let formImage = new FormData();
-            for (let i = 0; i < e.target.files.length; i++) {
-                formImage.append(`image${i}`, e.target.files[i]);
-            }
-            emitData = formImage;
-            let htmlSlideBox = '<div class="owl-carousel d-flex owl-theme">'
-            for (let i = 0; i < e.target.files.length; i++) {
-                htmlSlideBox += `<div>
+        if (e.target.files.length > 0) {
+            /*
+            // let filename1 = $('input[type=file]').val().split('\\').pop();
+            // let filename2 = $('input[type=file]').val().replace(/C:\\fakepath\\/i, '')
+            */
+            $('#file-1').prop('disabled', true);
+            let emitData = new FormData();
+            $('#sub-image-extracted').empty();
+            if (e.target.files.length > 1) {
+                let formImage = new FormData();
+                for (let i = 0; i < e.target.files.length; i++) {
+                    formImage.append(`image${i}`, e.target.files[i]);
+                }
+                emitData = formImage;
+                let htmlSlideBox = '<div class="owl-carousel d-flex owl-theme">'
+                for (let i = 0; i < e.target.files.length; i++) {
+                    htmlSlideBox += `<div>
                                     <img class="col-12 p-0 img-sub" src="${URL.createObjectURL(e.target.files[i])}" alt="target image">
                                 </div>`;
-            }
-            htmlSlideBox += '</div>';
-            $('#slide-img-box').html(htmlSlideBox);
-            $("#slide-img-box>.owl-carousel").owlCarousel({
-                responsive: {
-                    nav: true,
-                    center: true,
-                    loop: false,
-                    0: {
-                        items: 1
-                    },
-                    600: {
-                        items: 1
-                    },
-                    1000: {
-                        items: 1
-                    }
                 }
-            });
+                htmlSlideBox += '</div>';
+                $('#slide-img-box').html(htmlSlideBox);
+                $("#slide-img-box>.owl-carousel").owlCarousel({
+                    responsive: {
+                        nav: true,
+                        center: true,
+                        loop: false,
+                        0: {
+                            items: 1
+                        },
+                        600: {
+                            items: 1
+                        },
+                        1000: {
+                            items: 1
+                        }
+                    }
+                });
 
 
-        } else {
-
-            var htmlOneNew = `<div id='img-box'>
+            } else {
+                var htmlOneNew = `<div id='img-box'>
                  <img id="selected-image" class="col-12 p-0" src="---null" alt="target image"/>
             </div>`;
-            $('#slide-img-box').html(htmlOneNew);
-            let file = e.target.files[0];
-            let dataFiles = new FormData();
-            dataFiles.append('image', file);
-            const selectedImage = document.getElementById('selected-image');
-            if (file) {
-                selectedImage.src = URL.createObjectURL(file);
+                $('#slide-img-box').html(htmlOneNew);
+                let file = e.target.files[0];
+                let dataFiles = new FormData();
+                dataFiles.append('image', file);
+                const selectedImage = document.getElementById('selected-image');
+                if (file) {
+                    selectedImage.src = URL.createObjectURL(file);
+                }
+                emitData = dataFiles;
             }
-            emitData = dataFiles;
-        }
-        // $("#selected-image").attr('src', 'data:image/jpeg;base64,' + imgWithBox);
-        $("#arrow-right").removeClass("fa-arrow-right");
-        $("#arrow-right").addClass("fa-spinner fa-spin");
-        // $("#arrow-right").text('Recognizing object');
-        $("#arrow-down").removeClass("fa-arrow-down");
-        $("#arrow-down").addClass("fa-spinner fa-spin");
-        // $("#arrow-down").text('Recognizing object');
-        $('#content-pro-add').text(`Recognizing Object`);
-        $('#date-time-show').html('');
-        $('#detail-show').html('');
-        $('#total-show').html('');
-        $('#address-show').html('')
+            // $("#selected-image").attr('src', 'data:image/jpeg;base64,' + imgWithBox);
+            $("#arrow-right").removeClass("fa-arrow-right");
+            $("#arrow-right").addClass("fa-spinner fa-spin");
+            // $("#arrow-right").text('Recognizing object');
+            $("#arrow-down").removeClass("fa-arrow-down");
+            $("#arrow-down").addClass("fa-spinner fa-spin");
+            // $("#arrow-down").text('Recognizing object');
+            $('#content-pro-add').text(`Recognizing Object`);
+            $('#date-time-show').html('');
+            $('#detail-show').html('');
+            $('#total-show').html('');
+            $('#address-show').html('')
 
 
-        // origin url 'http://127.0.0.1:5000/api/test'
-        // 192.168.1.5
-        //'https://nobugnocode.com/api/test',
-        //'http://127.0.0.1:5000/api/test',
+            // origin url 'http://127.0.0.1:5000/api/test'
+            // 192.168.1.5
+            //'https://nobugnocode.com/api/test',
+            //'http://127.0.0.1:5000/api/test',
 
-        let data = await $.ajax({
-            type: "POST",
-            // headers: { 'Access-Control-Allow-Origin': '*' },
-            url: 'https://175.41.143.61/api/test',
-            data: emitData,
-            contentType: false,
-            processData: false,
-            dataType: 'json',
-            success: (data) => {
-                getResultToStore(data).then((data) => {
-                    const { address, datetime, item, total, imgResult } = data;
-                    let addressSave = '';
-                    if (address) {
-                        addressSave = address.map(ele => {
-                            return Object.values(ele)[0];
-                        });
-                    }
-
-                    let datetimeSave = '';
-                    if (datetime) {
-                        datetimeSave = datetime.map(ele => {
-                            return Object.values(ele)[0];
-                        });
-                    }
-
-                    let itemSave = ''
-                    if (item) {
-                        itemSave = item.map(ele => {
-                            return Object.values(ele)[0];
-                        });
-                    }
-
-                    let totalSave = '';
-                    if (total) {
-                        totalSave = total.map(ele => {
-                            return Object.values(ele)[0];
-                        });
-                    }
-
-                    let imgResultSave = '';
-                    if (imgResult) {
-                        imgResultSave = imgResult.map(ele => {
-                            return `data:image/jpeg;base64, ${ele}`;
-                        });
-                    }
-                    // let dataEmit = {
-                    //     'address': addressSave[0] ?? '',
-                    //     'datetime': datetimeSave[0] ?? '',
-                    //     'items': itemSave ?? [],
-                    //     'total': totalSave[0] ?? '',
-                    //     'dateTimeExtract': new Date(),
-                    //     'dateTimeUpdate': new Date(),
-                    //     'imageResult': imgResultSave ?? []
-                    // }
-                    ;
-                    totalUniq = convertMoney(totalSave[0]);
-                    dConvert = convertDateTime(datetimeSave[0]);
-
-                    ddt = new Date(dConvert);
-
-                    if (!isValidDate(ddt)) {
-                        ddt = moment(dConvert, 'DD/MM/YYYY').toDate();
-                    }
-
-                    let dataEmit = {
-                        'address': addressSave[0] ?? '',
-                        'datetime': ddt ?? new Date(),
-                        'items': itemSave ?? [],
-                        'total': totalUniq ?? '',
-                        'dateTimeExtract': new Date(),
-                        'dateTimeUpdate': new Date(),
-                        'imageResult': imgResultSave ?? []
-                    }
-
-                    $.ajax({
-                        type: "POST",
-                        contentType: "application/json",
-                        dataType: "json",
-                        url: "/api/create-invoice",
-                        data: JSON.stringify(dataEmit),
-                        success: (res) => {
-                            alert('done', res);
-                            $('#file-1').prop('disabled', false);
-                        },
-                        error: (err) => {
-                            console.log('tạo hóa đơn thất bại', err);
-                            $('#file-1').prop('disabled', false);
+            let data = await $.ajax({
+                type: "POST",
+                // headers: { 'Access-Control-Allow-Origin': '*' },
+                url: 'https://175.41.143.61/api/test',
+                data: emitData,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: (data) => {
+                    getResultToStore(data).then((data) => {
+                        const { address, datetime, item, total, imgResult } = data;
+                        let addressSave = '';
+                        if (address) {
+                            addressSave = address.map(ele => {
+                                return Object.values(ele)[0];
+                            });
                         }
-                    });
 
-                }).catch(err => {
-                    console.log('request xử lý trích xuất thất bại', err);
+                        let datetimeSave = '';
+                        if (datetime) {
+                            datetimeSave = datetime.map(ele => {
+                                return Object.values(ele)[0];
+                            });
+                        }
+
+                        let itemSave = ''
+                        if (item) {
+                            itemSave = item.map(ele => {
+                                return Object.values(ele)[0];
+                            });
+                        }
+
+                        let totalSave = [''];
+                        if (total[0]) {
+                            totalSave = total.map(ele => {
+                                return Object.values(ele)[0];
+                            });
+                        }
+
+                        let imgResultSave = '';
+                        if (imgResult) {
+                            imgResultSave = imgResult.map(ele => {
+                                return `data:image/jpeg;base64, ${ele}`;
+                            });
+                        }
+                        // let dataEmit = {
+                        //     'address': addressSave[0] ?? '',
+                        //     'datetime': datetimeSave[0] ?? '',
+                        //     'items': itemSave ?? [],
+                        //     'total': totalSave[0] ?? '',
+                        //     'dateTimeExtract': new Date(),
+                        //     'dateTimeUpdate': new Date(),
+                        //     'imageResult': imgResultSave ?? []
+                        // }
+                        ;
+                        totalUniq = '';
+                        if (totalSave[0].length > 0) {
+                            totalUniq = convertMoney(totalSave[0]);
+                        }
+
+                        dConvert = convertDateTime(datetimeSave[0]);
+
+                        ddt = new Date(dConvert);
+
+                        if (!isValidDate(ddt)) {
+                            ddt = moment(dConvert, 'DD/MM/YYYY').toDate();
+                        }
+
+                        let dataEmit = {
+                            'address': addressSave[0] ?? '',
+                            'datetime': ddt ?? new Date(),
+                            'items': itemSave ?? [],
+                            'total': totalUniq ?? '',
+                            'dateTimeExtract': new Date(),
+                            'dateTimeUpdate': new Date(),
+                            'imageResult': imgResultSave ?? []
+                        }
+
+                        $.ajax({
+                            type: "POST",
+                            contentType: "application/json",
+                            dataType: "json",
+                            url: "/api/create-invoice",
+                            data: JSON.stringify(dataEmit),
+                            success: (res) => {
+                                alert('done', res);
+                                $('#file-1').prop('disabled', false);
+                            },
+                            error: (err) => {
+                                console.log('tạo hóa đơn thất bại', err);
+                                $('#file-1').prop('disabled', false);
+                            }
+                        });
+
+                    }).catch(err => {
+                        console.log('request xử lý trích xuất thất bại', err);
+                        $('#file-1').prop('disabled', false);
+                    });
+                },
+                error: (err) => {
+                    console.log('requets predict thất bại', err);
                     $('#file-1').prop('disabled', false);
-                });
-            },
-            error: (err) => {
-                console.log('requets predict thất bại', err);
-                $('#file-1').prop('disabled', false);
-            }
-        });
+                }
+            });
+        }
     });
 
 
@@ -316,14 +321,17 @@ $(function () {
         listResult = [];
 
         let data = await Promise.all(listFile.map(async (file) => {
-            let data = await worker.recognize('data:image/jpeg;base64,' + file, labelLanguage)
-                .progress((packet) => {
-                    processStatus(packet, label, idShowLog, idShow);
-                });
+
 
             try {
+                let data = await worker.recognize('data:image/jpeg;base64,' + file, labelLanguage)
+                    .progress((packet) => {
+                        processStatus(packet, label, idShowLog, idShow);
+                    });
+                console.log(data, label, "lỗi do total không có line nào");
                 const dataProcess = data.lines.map(line => line.text);
                 let textStandard = data.text;
+                // console.log(data, 'lỗi sao vậy ', label, 'trích xuất chứ');
                 if (label === 'item') {
                     textStandard = data.lines;
                     linePrice = textStandard.splice(textStandard.length - 1, 1);
@@ -346,15 +354,17 @@ $(function () {
 
                 const packet = { status: 'done', result: dataProcess, rs2: textStandard };
                 let rs = processStatus(packet, label, idShowLog, idShow);
-                console.log('tại sao mà mày cứ dồn cục lại vậy', rs, label);
+                // console.log('tại sao mà mày cứ dồn cục lại vậy', rs, label);
                 // listResult.push(rs);
+                console.log(packet, '=============lôi');
+
                 return rs;
             } catch (err) {
                 alertify.notify(`There are some minor bugs happening, please reload the page to resolve this issue. Reason => ${err}`, 'warning', 15);
             }
         }))
         // listResult.push(data)
-        console.log('list nhận dc', data);
+        // console.log('list nhận dc', data);
         return data;
     };
 
@@ -457,6 +467,7 @@ $(function () {
                 //         <p>`
                 break;
             case "Total":
+                console.log(convertMoney(texts), texts, 'lỗi do convert không dc');
                 dataCurrent[label] = convertMoney(texts);
                 result = `<p style="font-size: 1.5rem; line-height: 1.2; font-weight: 500; color:#343343">
                         ${convertMoney(texts)}

@@ -29,25 +29,25 @@ block content
                                 each img in val.imageResult
                                     .img-result
                                         img(src=`${img}` alt="hinh" srcset="" width='100%')
-                    .col-md-8
+                    .col-md-8.px-0
                         .content
                             table.table.table-bordered.mx-2
                                 tbody
-                                tr
-                                    th.w-25(scope="row") Address:
-                                    td= val.address
-                                tr
-                                    th(scope="row") Product :
-                                    td(colspan="2")
-                                        each item in val.items
-                                            p= item
-                                tr
-                                    th(scope="row ") Total:
-                                    td= val.total
-                                tr
-                                    th(scope="row") Date:
-                                    - var dFM = (val.datetime).toLocaleDateString()
-                                    td(colspan="2")= dFM
+                                    tr
+                                        th.w-25(scope="row") Address:
+                                        td= val.address
+                                    tr
+                                        th(scope="row") Product :
+                                        td(colspan="2")
+                                            each item in val.items
+                                                p= item
+                                    tr
+                                        th(scope="row ") Total:
+                                        td= val.total
+                                    tr
+                                        th(scope="row") Date:
+                                        - var dFM = (val.datetime).toLocaleDateString()
+                                        td(colspan="2")= dFM
                     .col-12 
                         .modify-invoice.d-flex.justify-content-around.w-100
                             button.btn.btn-danger.delete-item( type="button", idDel=`${val._id}`) Delete
