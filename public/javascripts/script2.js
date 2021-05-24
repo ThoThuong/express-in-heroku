@@ -98,7 +98,7 @@ $(function () {
             // headers: { 'Access-Control-Allow-Origin': '*' },
             url: 'https://175.41.143.61/api/test',
             data: emitData,
-            contentType: 'multipart/form-data',
+            contentType: false,
             processData: false,
             dataType: 'json',
             success: (data) => {
