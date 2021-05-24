@@ -96,7 +96,7 @@ $(function () {
             let data = await $.ajax({
                 type: "POST",
                 // headers: { 'Access-Control-Allow-Origin': '*' },
-                url: 'https://175.41.143.61/api/test',
+                url: 'http://175.41.143.61/api/test',
                 data: emitData,
                 contentType: false,
                 processData: false,
@@ -360,6 +360,7 @@ $(function () {
 
                 return rs;
             } catch (err) {
+
                 alertify.notify(`There are some minor bugs happening, please reload the page to resolve this issue. Reason => ${err}`, 'warning', 15);
             }
         }))
