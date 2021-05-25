@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "postshrinkwrap": "rm -f package-lock.json",
-    "start": "node ./bin/www",
+    "start": "nodemon ./bin/www",
     "start-prod": "node ./bin/www"
   },
   "dependencies": {
     "@dmuy/jquery-datepicker": "^1.2.2-rc2",
     "alertifyjs": "^1.13.1",
+    "aws-sdk": "^2.913.0",
     "axios": "^0.21.1",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",

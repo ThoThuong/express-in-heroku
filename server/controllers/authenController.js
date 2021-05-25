@@ -8,9 +8,9 @@ var ObjectId = require('mongodb').ObjectID;
 
 // local variable to stored token list
 let tokenList = {};
-const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || "3d";
+const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || "1d";
 const accessTokenSecret = process.env.accessTokenSecret || 'khongphansumienvaook';
-const refreshTokenLife = process.env.REFRESH_TOKEN_LIFE || "3d";
+const refreshTokenLife = process.env.REFRESH_TOKEN_LIFE || "1d";
 const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET || "tooinoislaijkhoongphanasuwjmieenvaof";
 
 exports.submitLogin = async (req, res, next) => {

@@ -37,7 +37,7 @@ var schema = new mongoose.Schema({
         type: String,
         required: false,
     },
-    listInvoice: [{ type: ObjectId }]
+    // listInvoice: [{ type: ObjectId }]
 });
 const Users = mongoose.model('users', schema);
 module.exports = Users;

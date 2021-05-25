@@ -1,6 +1,8 @@
 var Users = require('../model/user');
 var invoices = require('../model/invoices');
+const s3Upload = require('../helpers/s3Upload');
 UserAuthens = require('../model/userAuthen');
+
 var fs = require('fs');
 const accessTokenSecret = process.env.accessTokenSecret || 'khongphansumienvaook';
 const jwtHelper = require('../helpers/jwt.helper');
@@ -11,97 +13,34 @@ exports.infoUser = (req, res) => {
     res.redirect('/info-user')
 }
 
-/*
-làm gồng file này một xíu tách ra sau
-*/
-// const Yolo = require('@vapi/node-yolo');
-
-// exports.create = (req, res) => {
-//     // validate request
-//     if (!req.body) {
-//         res.status(400).send({ message: "Content can not be emtpy!" });
-//         return;
-//     }
-
-//     // new user
-//     const user = new Users({
-//         fullname: '',
-//         email: req.body.email,
-//         sdt: req.body.sdt || "",
-//         birthDay: req.body.sdt || "",
-//         isActive: req.body.isActive || true,
-//         createTime: req.body.createTime || (new Date()).getTime.toString(),
-//         updateTime: req.body.updateTime || (new Date()).getTime.toString(),
-//         gender: req.body.gender || ""
-//     })
-
-//     // save user in the database
-//     user
-//         .save(user)
-//         .then(data => {
-//             //res.send(data)
-//             res.send(data);
-//             res.redirect('/');
-//         })
-//         .catch(err => {
-//             res.status(500).send({
-//                 message: err.message || "Some error occurred while creating a create operation"
-//             });
-//         });
-
-// }
-// exports.find = (req, res) => {
-//     var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-//     console.log(fullUrl);
-//     if (req.query.id) {
-//         const id = req.query.id;
-//         console.log(id);
-//         Users.findById(id)
-//             .then(data => {
-//                 if (!data) {
-//                     res.status(404).send({ message: "Not found user with id " + id })
-//                 } else {
-//                     res.send(data)
-//                 }
-//             })
-//             .catch(err => {
-//                 res.status(500).send({ message: "Erro retrieving user with id " + id })
-//             })
-
-//     } else {
-//         Users.find()
-//             .then(user => {
-//                 res.send(user)
-//             })
-//             .catch(err => {
-//                 res.status(500).send({ message: err.message || "Error Occurred while retriving user information" })
-//             })
-//     }
-//     // res.render('landing', { title: 'all Users' });
-// }
-
-
 exports.updateInfoUser = (req, res) => {
-    console.log(req.params);
-    console.log((req.body));
+    // console.log(req.params);
+    // console.log((req.body));
     if (!req.body) {
         return res
             .status(400)
-            .send({ message: "Data to update can not be empty" })
+            .send({ message: "Data to update can not be empty" });
     }
 
-    const { _id, data } = req.body;
-    Users.findByIdAndUpdate(_id, data, { useFindAndModify: false })
-        .then(data => {
-            if (!data) {
-                res.status(404).send({ message: `Cannot Update user with ${id}. Maybe user not found!` })
-            } else {
-                res.send(data)
+    const { id, data } = req.body;
+
+    try {
+
+        Users.findOneAndUpdate({ _id: id }, data, function (error, result) {
+            if (error) {
+                return res.status(404).send({ message: `Cannot Update user with ${id}. Maybe user not found!` });
             }
-        })
-        .catch(err => {
-            res.status(500).send({ message: "Error Update user information" })
-        })
+            Users.findById({ _id: result._id }).then((dtrp) => {
+                return res.status(200).send(dtrp);
+            }).catch(err => {
+                return res.status(404).send({ message: `Cannot Update user with ${id}. Maybe user not found!` });
+            })
+        });
+
+
+    } catch (error) {
+        return res.status(404).send({ message: `Cannot Update user with ${id}. Maybe user not found!` });
+    }
 }
 
 
@@ -135,7 +74,9 @@ exports.storeInfoInvoice = (req, res, next) => {
     res.status(200).json({ message: 'ok' });
 }
 exports.createInvoice = async (req, res) => {
-    const data = req.body
+    console.log('vaof taoj hoas donw');
+    const data = req.body;
+    const { imageResult } = data;
 
     let cookie = req.cookies['x-www-au'];
     let decoded = await jwtHelper.verifyToken(cookie.accessToken, accessTokenSecret);
@@ -147,20 +88,29 @@ exports.createInvoice = async (req, res) => {
     try {
         console.log(acc._id);
         let accountId = acc._id;
-        data['idOwner'] = accountId
-        let invoice = new invoices(data);
-        invoice
-            .save(invoice)
-            .then(data => {
-                return res.status(201).json({ data });
-                // res.redirect('/');
-            }).catch(err => {
-                return res.status(500).json({
-                    message: err.message || "Error, ReExtract"
-                });
-            }
-            );
+        // const imgBase64 = imageResult[0].replace(/^data:image\/png;base64,/, "");
+        let imgBase64 = imageResult[0];
+        imgBase64 = imgBase64.split('base64,').pop();
 
+        s3Upload.uploadFilev2(imgBase64, accountId, 'imageResult').then(s3Respon => {
+            data['idOwner'] = accountId;
+            data['imageResult'] = s3Respon.location ? s3Respon.location : imageResult[0];
+            let invoice = new invoices(data);
+            invoice
+                .save(invoice)
+                .then(data => {
+                    return res.status(201).json({ data });
+                    // res.redirect('/');
+                }).catch(err => {
+                    return res.status(500).json({
+                        message: err.message || "Error, ReExtract"
+                    });
+                }
+                );
+        }).catch(err => {
+            console.log('errr', err);
+            return res.status(500).send({ message: `Error s3 ${err}` });
+        });
     } catch (error) {
         res.status(500).send({ message: "Error Update user information" })
     }
@@ -204,6 +154,7 @@ exports.deleteInvoice = async (req, res, next) => {
 
 
 var ObjectId = require('mongodb').ObjectID;
+const { log } = require('util');
 exports.scanInvoices = async (req, res) => {
 
     let cookie = req.cookies['x-www-au'];

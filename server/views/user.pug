@@ -1,6 +1,6 @@
 extends layout 
 block content
-    section.container.mt-5.my-2
+    section.container.mt-5.my-2()
         .row.py-3.justify-content-center.border.border-success.bg-light.shadow.rounded.mx-3
             input#idUserCurrent(type="hidden" value=`${thisUser._id}` )
             .col-md-4.my-3
@@ -16,9 +16,10 @@ block content
                         //-     label(for) Last Name:
                         //-     input.form-control(type="text" placeholder="Last name")
                     .form-group.row.mt-3
-                        label.col-sm-4.col-form-label(for="birthday") Birth day:
+                        label.col-sm-4.col-form-label(for="birthDay") Birth day:
                         .col-sm-8
-                            input.form-control#birthday(type="date" placeholder="dd/mm/yyyy" min="01/04/2017" max="31/12/2100" readonly, value=`${thisUser.birthDay?(thisUser.birthDay).toLocaleDateString():(new Date()).toLocaleDateString()}`)
+                            - var bd = thisUser.birthDay ? thisUser.birthDay : new Date();
+                                input.form-control(id=`birthDay` readonly data-maxdate="today" data-mindate="1/1/1821" type="text" data-theme="green" value=`${thisUser.birthDay}`  )
                     .form-group.row.mt-3
                         label.col-sm-4.col-form-label(for="email") Email :
                         .col-sm-8
@@ -30,26 +31,29 @@ block content
                     .row
                         legend.col-form-label.col-sm-4.pt-0 Gender :
                         .col-sm-8.d-flex
-                            .form-check.mr-4
-                                if thisUser.gender==='male' && thisUser.gender!==''
-                                    input.form-check-input#male(type="radio" name="male" value="male" checkeds disabled)
-                                    label.form-check-label(for="male") Male
-                                else 
-                                    input.form-check-input#male(type="radio" name="male" value="male" disabled)
-                                    label.form-check-label(for="male") Male
-                            .form-check
-                                if thisUser.gender==='female' && thisUser.gender!==''
-                                    input.form-check-input#female(type="radio" name="female" value="female" checked disabled)
-                                    label.form-check-label(for="female") Female
-                                else 
-                                    input.form-check-input#female(type="radio" name="female" value="female" disabled)
-                                    label.form-check-label(for="female") Female
+                            if thisUser.gender==='female'
+                                .form-check.d-flex
+                                    .mr-5
+                                        input.form-check-input#female(type="radio" name="gender" value="female" checked disabled)
+                                        label.form-check-label(for="female") Female
+                                    .ml-5
+                                        input.form-check-input#male(type="radio" name="gender" value="male" disabled)
+                                        label.form-check-label(for="male") Male
+                            else
+                                .form-check.d-flex
+                                    .mr-5
+                                        input.form-check-input#female(type="radio" name="gender" value="female" disabled)
+                                        label.form-check-label(for="female") Female
+                                    .ml-5
+                                        input.form-check-input#male(type="radio" name="gender" value="male" checked disabled)
+                                        label.form-check-label(for="male") Male
+
                     .form-group.row.mt-3
                         label.col-sm-4.col-form-label(for="address") Address :
                         .col-sm-8
                             input.form-control#address(type="text", readonly, value=value=`${thisUser.address?thisUser.address:''}`)
                     .row 
                         .col.d-flex.justify-content-around
-                            button.btn.btn-success(type="button", edit) Edit
-                            button.btn.btn-danger(type="button", save, disabled) Save
-                            button.btn.btn-danger(type="button", cancel, disabled) Cancel
+                            button.btn.btn-success#edit-us.user-ac(type="button", edit) Edit
+                            button.btn.btn-danger#save-us.user-ac(type="button", save, disabled) Save
+                            button.btn.btn-danger#cancel-us.user-ac(type="button", cancel, disabled) Cancel

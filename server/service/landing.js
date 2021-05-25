@@ -42,7 +42,7 @@ exports.renderInfoUser = async (req, res, next) => {
             if (!userInfo) {
                 return res.send('not found this profile ');
             } else {
-                console.log(userInfo.sdt, 'casi gif ddaay', userInfo);
+                // console.log(userInfo.sdt, 'casi gif ddaay', userInfo);
                 return res.render('user', {
                     thisUser: userInfo
                 });
@@ -63,10 +63,10 @@ exports.renderListInvoice = async (req, res, next) => {
     let password = decoded.data.password;
 
     const acc = await UserAuthens.findOne({ email, password });
-    idcp = acc._id;
+    let idcp = acc._id;
     // const listInvoice = await invoice.find({ idOwner: idcp });
-
-    let perPage = 10; // số lượng sản phẩm xuất hiện trên 1 page
+    console.log(idcp)
+    let perPage = 5; // số lượng sản phẩm xuất hiện trên 1 page
     let page = req.params.pageNumber || 1;
     invoice
         .find({ idOwner: idcp }) // find tất cả các data
@@ -80,7 +80,7 @@ exports.renderListInvoice = async (req, res, next) => {
                     list: invoices, // sản phẩm trên một page
                     current: page, // page hiện tại
                     pages: perPage >= count ? 1 : Math.ceil(count / perPage), // tổng số các page
-                    totalInvoice: count
+                    totalInvoice: invoices.length
                 });
                 // return res.render('invoices', { list: listInvoice });
             });

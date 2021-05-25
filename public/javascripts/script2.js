@@ -1,16 +1,6 @@
 // const { Promise } = require("mongoose");
 
 $(function () {
-    // $("body").css("display", "none");
-    // $("body").fadeIn(400);
-    // // to fade out before redirect
-    // $('a').click(function (e) {
-    //     redirect = $(this).attr('href');
-    //     e.preventDefault();
-    //     $('body').fadeOut(400, function () {
-    //         document.location.href = redirect
-    //     });
-    // });
     const corePath = window.navigator.userAgent.indexOf("Edge") > -1
         ? '/javascripts/provider/tesseract-core.asm.js'
         : '/javascripts/provider/tesseract-core.wasm.js';
@@ -74,13 +64,11 @@ $(function () {
                 }
                 emitData = dataFiles;
             }
-            // $("#selected-image").attr('src', 'data:image/jpeg;base64,' + imgWithBox);
+
             $("#arrow-right").removeClass("fa-arrow-right");
             $("#arrow-right").addClass("fa-spinner fa-spin");
-            // $("#arrow-right").text('Recognizing object');
             $("#arrow-down").removeClass("fa-arrow-down");
             $("#arrow-down").addClass("fa-spinner fa-spin");
-            // $("#arrow-down").text('Recognizing object');
             $('#content-pro-add').text(`Recognizing Object`);
             $('#date-time-show').html('');
             $('#detail-show').html('');
@@ -92,11 +80,12 @@ $(function () {
             // 192.168.1.5
             //'https://nobugnocode.com/api/test',
             //'http://127.0.0.1:5000/api/test',
+            //'http://175.41.143.61/api/test',
 
-            let data = await $.ajax({
+            $.ajax({
                 type: "POST",
                 // headers: { 'Access-Control-Allow-Origin': '*' },
-                url: 'http://175.41.143.61/api/test',
+                url: 'http://175.41.143.61/api/predict',
                 data: emitData,
                 contentType: false,
                 processData: false,
@@ -104,6 +93,7 @@ $(function () {
                 success: (data) => {
                     getResultToStore(data).then((data) => {
                         const { address, datetime, item, total, imgResult } = data;
+                        // console.log('sai từ ở đây', data); // //important
                         let addressSave = '';
                         if (address) {
                             addressSave = address.map(ele => {
@@ -138,6 +128,7 @@ $(function () {
                                 return `data:image/jpeg;base64, ${ele}`;
                             });
                         }
+                        // console.log('casi hinh nay may ', imgResultSave);  //important
                         // let dataEmit = {
                         //     'address': addressSave[0] ?? '',
                         //     'datetime': datetimeSave[0] ?? '',
@@ -147,7 +138,7 @@ $(function () {
                         //     'dateTimeUpdate': new Date(),
                         //     'imageResult': imgResultSave ?? []
                         // }
-                        ;
+                        // ;
                         totalUniq = '';
                         if (totalSave[0].length > 0) {
                             totalUniq = convertMoney(totalSave[0]);
@@ -171,6 +162,8 @@ $(function () {
                             'imageResult': imgResultSave ?? []
                         }
 
+                        // console.log('xử lý sai thông tin để mà lưu ', dataEmit);  //important
+
                         $.ajax({
                             type: "POST",
                             contentType: "application/json",
@@ -182,18 +175,21 @@ $(function () {
                                 $('#file-1').prop('disabled', false);
                             },
                             error: (err) => {
-                                console.log('tạo hóa đơn thất bại', err);
+                                // console.log('tạo hóa đơn thất bại', err);  //important
+                                alertify.notify(`create info invoice failed`, 'error', 15);
                                 $('#file-1').prop('disabled', false);
                             }
                         });
 
                     }).catch(err => {
-                        console.log('request xử lý trích xuất thất bại', err);
+                        // console.log('request xử lý trích xuất thất bại', err);  //important
+                        alertify.notify(`Predict request failed`, 'error', 15);
                         $('#file-1').prop('disabled', false);
                     });
                 },
                 error: (err) => {
-                    console.log('requets predict thất bại', err);
+                    // console.log('requets predict thất bại', err); // //important
+                    alertify.notify(`Requets predict thất bại failed`, 'error', 15);
                     $('#file-1').prop('disabled', false);
                 }
             });
@@ -209,7 +205,7 @@ $(function () {
         let resultToStored = {}
         if (data.files) {
             let result = data.files;
-            console.log(result);
+            // console.log(result); // //important
             result =
                 result.reduce((previous, current) => {
                     let key = Object.keys(current)[0];
@@ -221,6 +217,7 @@ $(function () {
                     return previous;
                 }, {});
             const { address, datetime, total, item, imgWithBox } = result;
+
             let htmlSlideBox = '<div class="owl-carousel d-flex owl-theme">'
             if (imgWithBox) {
                 for (const img of imgWithBox) {
@@ -280,7 +277,7 @@ $(function () {
                     htmlSubImage += `<div class="item mx-3"><img class="col-12 p-0 img-sub" src="data:image/jpeg;base64, ${img}" alt="target image"></div>`;
                 }
                 rsTotal = await startExtractInfo(total, '#total-show', 'Total', '#log-total');
-                // console.log(rsTotal, 'total  ------------------------');
+                // console.log(rsTotal, 'total  ------------------------'); // //important
                 resultToStored['total'] = rsTotal;
             }
             htmlSubImage += '</div>';
@@ -311,7 +308,7 @@ $(function () {
         $(".fas").addClass('fa-check');
         $('#content-pro-add').text('');
 
-        // console.log('tai sao o day lai bị miss', resultToStored);
+        // console.log('tai sao o day lai bị miss', resultToStored); //important
         return resultToStored;
 
     };
@@ -328,10 +325,9 @@ $(function () {
                     .progress((packet) => {
                         processStatus(packet, label, idShowLog, idShow);
                     });
-                console.log(data, label, "lỗi do total không có line nào");
+                //console.log(data, label, "lỗi do total không có line nào"); //imporatnt
                 const dataProcess = data.lines.map(line => line.text);
                 let textStandard = data.text;
-                // console.log(data, 'lỗi sao vậy ', label, 'trích xuất chứ');
                 if (label === 'item') {
                     textStandard = data.lines;
                     linePrice = textStandard.splice(textStandard.length - 1, 1);
@@ -356,16 +352,16 @@ $(function () {
                 let rs = processStatus(packet, label, idShowLog, idShow);
                 // console.log('tại sao mà mày cứ dồn cục lại vậy', rs, label);
                 // listResult.push(rs);
-                console.log(packet, '=============lôi');
+
 
                 return rs;
             } catch (err) {
 
-                alertify.notify(`There are some minor bugs happening, please reload the page to resolve this issue. Reason => ${err}`, 'warning', 15);
+                alertify.notify(`Here some unexpected exceptions occurred, because the image is too small, the image is noisy. Response => ${err}`, 'Reload page to solve', 'warning', 15);
             }
         }))
         // listResult.push(data)
-        // console.log('list nhận dc', data);
+        // console.log('list nhận dc để lưu ', data); important
         return data;
     };
 
@@ -468,7 +464,7 @@ $(function () {
                 //         <p>`
                 break;
             case "Total":
-                console.log(convertMoney(texts), texts, 'lỗi do convert không dc');
+                // console.log(convertMoney(texts), '---------------', texts, 'lỗi do convert không dc');  //important
                 dataCurrent[label] = convertMoney(texts);
                 result = `<p style="font-size: 1.5rem; line-height: 1.2; font-weight: 500; color:#343343">
                         ${convertMoney(texts)}
@@ -520,6 +516,18 @@ $(function () {
         $('#if :input').prop('disabled', false);
         $('#if :input').prop('readonly', false);
         $(this).attr('disabled', true)
+        $('#email').prop('disabled', true);
+        $('#email').prop('readonly', true);
+        duDatepicker('#birthDay', {
+            format: 'mm/dd/yyyy',
+            range: false,
+            clearBtn: true,
+            theme: 'green',
+            maxDate: 'today',
+            events: {
+
+            }
+        });
     });
 
     $('button[save]').click(async (e) => {
@@ -527,45 +535,64 @@ $(function () {
             keya = $(this).attr('id');
             value = $(this).val();
             if (keya === 'male' || keya === 'female') {
-                value = $(`input[id = '${keya}']: checked`).val();
+                value = $(`input[id='${keya}']:checked`).val();
                 keya = 'gender';
             }
             if (value !== undefined) {
                 objCurrent = new Object();
                 objCurrent[keya] = value;
-                console.log(objCurrent);
             }
             return objCurrent
         }).get();
+        // console.log(dt, 'data lấy xuống');//important
         dt.splice(7, 3);
+        // console.log(dt, 'data cắt');//important
         const data = dt.reduce((previous, current) => {
             key = Object.keys(current)[0];
             previous[key] = current[key];
             return previous;
         }, {});
-
-        // orifin url: http://localhost:3000/api/update-info-user
-        if ((data.email.trim()).length > 0) {
-            $.ajax({
-                type: "POST",
-                url: "/api/update-info-user",
-                data: {
-                    '_id': $('#idUserCurrent').val(),
-                    'data': data
-                },
-                success: (res) => {
-                    $('#if :input').prop('disabled', true);
-                    $('#if :input').prop('readonly', true);
-                    $(this).attr('disabled', false);
-                    alertify.notify('success', 'success', 5);
-                },
-                error: (err) => {
-                    alertify.notify('error', 'success', 5);
-                }
-            });
-        } else {
-            alertify.notify('do not empty email', 'success', 5);
+        // console.log(data, $('#idUserCurrent').val(), 'data ổn định');//important
+        // let dataSmaple = {
+        //     "id": "60a8df8d4c64c0031c0ffedd",
+        //     "data": {
+        //         "fullname": "Trần Ngọc  Thương postman",
+        //         "email": "nathuong99@gmail.com",
+        //         "sdt": "0398009678",
+        //         "birthDay": "11/19/1999",
+        //         "gender": "male",
+        //         "address": "497/24, phan văn trị"
+        //     }
+        // };//important
+        let dataEmit = {
+            'id': $('#idUserCurrent').val(),
+            'data': {
+                "fullname": data.fullname ? data.fullname : "",
+                "email": data.email ? data.email : '',
+                "sdt": data.sdt ? data.sdt : '',
+                "birthDay": data.birthDay ? data.birthDay : '',
+                "gender": data.gender ? data.gender : '',
+                "address": data.address ? data.address : ''
+            }
         }
+        // console.log('cái gửi đi', dataEmit);//important
+        $.ajax({
+            type: "POST",
+            url: "/api/update-info-user",
+            data: dataEmit,
+            success: (res) => {
+                location.reload();
+                // $('.user-ac').attr('disabled', true);
+                // $('#edit-us').attr('disabled', false);
+                // $('#if :input').prop('disabled', true);
+                // $('#if :input').prop('readonly', true);
+                // alertify.notify('success', 'success', 5);
+                // console.log(res);//important
+            },
+            error: (err) => {
+                alertify.notify('error', 'error', 5);
+            }
+        });
     });
 
     $('button[cancel]').click((e) => {
@@ -602,14 +629,14 @@ $(function () {
             },
             dataType: 'json',
             success: (res) => {
-                console.log(res);
+                // console.log(res); //important
                 alertify.notify(`Deleted. Reload page to solve`, 'success', 15);
                 $(`#inv-item-${idDel}`).remove();
                 location.reload();
             },
             error: (err) => {
                 alertify.notify(`do not delete. Reload page to solve`, 'error', 15);
-                console.log(err);
+                // console.log(err);  //important
             }
         })
     });
@@ -617,7 +644,7 @@ $(function () {
     $(document).on('click', '.save-item-modal', (e) => {
         let btn = e.target;
         let val = $(e.target).attr('idinvoice');
-        console.log(btn);
+        // console.log(btn);  //important
 
         id1 = `address-item-${val}`;
         id2 = `datetime-item-${val}`;
@@ -661,7 +688,7 @@ $(function () {
             'total': total ?? '',
             'dateTimeUpdate': new Date(),
         }
-        console.log(dataEmit);
+        // console.log(dataEmit);  //important
         $.ajax({
             type: "POST",
             contentType: "application/json",
@@ -669,7 +696,7 @@ $(function () {
             url: "/api/update-invoice",
             data: JSON.stringify(dataEmit),
             success: (res) => {
-                console.log('ok', res);
+                // console.log('ok', res);  //important
                 alertify.notify(`Update success fully. :) `, 'success', 15);
                 // $(`#modal-item-${val}`).modal('hide');
                 // window.location = '/api/list-invoice';
