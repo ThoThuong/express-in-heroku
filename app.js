@@ -25,9 +25,9 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 // app.use(express.json({ limit: '50mb' }));
 // app.use(bodyParser.json());
-app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.json({ limit: '150mb' }));
 // app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.urlencoded({ limit: '150mb', extended: true }));
 // app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 // app.use(upload.array());
 app.use(cookieParser());
@@ -61,7 +61,7 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
+  res.status(err.status || 500).json({ mess: err });
   res.render('error');
 });
 
