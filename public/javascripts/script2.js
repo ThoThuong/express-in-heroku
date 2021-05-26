@@ -311,7 +311,7 @@ $(function () {
             $.ajax({
                 type: "POST",
                 headers: { 'Access-Control-Allow-Origin': '*' },
-                url: 'http://127.0.0.1:5000/api/predict',
+                url: 'http://175.41.143.61/api/predict',
                 data: emitData,
                 contentType: false,
                 processData: false,
