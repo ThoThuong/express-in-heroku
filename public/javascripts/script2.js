@@ -1,5 +1,242 @@
 // const { Promise } = require("mongoose");
 
+/**
+ * 
+ * @param {*} imgFile : cho vào cái file mới lấy lên
+ * @param {*} idShowImg : cái id chỗ để show cái hình sau khi xử lý quay nó về đúng hướng
+ * @param {*} maxWidthImg : kich thước chiều rộng của tấm hình
+ * @returns trả về phần tử img có thể gắn lên giao diện luôn
+ * @ note1: Ở đây là nó show cái hình lên bằng cách sử dụng URL.createObjectURL(newBlob); với cái blob
+ * @ note2: Cái file muốn show lên cũng phải sử dụng hàm này thì suy ra là cái blob nó cũng là cái file
+ * @ note3 Theo tài liệu thì cái blob nó cũng là cái file nhưng nó bị thiếu thuộc tính lastMobifiedDate và name
+ * @ note4: Nhưng đẻ ý thì cái blob nó vẫn có các thuộc tính trên
+ */
+const processImgOnMobilev2 = function (imgFile, idShowImg, maxWidthImg) {
+    return loadImage(
+        imgFile,
+        function (img, data) {
+            if (data.imageHead && data.exif) {
+                // Reset Exif Orientation data:
+                loadImage.writeExifData(data.imageHead, data, 'Orientation', 1)
+                return img.toBlob(function (blob) {
+                    return loadImage.replaceHead(blob, data.imageHead, function (newBlob) {
+                        // do something with newBlob
+                        let img4blob = new Image();
+                        img4blob.src = URL.createObjectURL(newBlob);
+                        document.querySelector(idShowImg).appendChild(img4blob);
+                        return newBlob;
+                    })
+                }, 'image/jpeg');
+            }
+            return img;
+        },
+        { meta: true, orientation: true, canvas: true, maxWidth: maxWidthImg }
+    );
+};
+
+
+/**
+ * 
+ * hàm này đọc lên một tấm hình bị xoay và lần lượt xứt lý và in ra kết quả các bước
+ * bước cuối cùng thì nó không bị xoay
+ */
+const processImgOnMobilev1 = function (imgFile, id1 = '#test-img-1', id2 = '#test-img-2', id3 = '#test-img-3') {
+    loadImage(imgFile, { meta: true, canvas: true, maxWidth: 800, orientation: 1 })
+        .then(function (data) {
+            console.log('hình qua xử lý lần1', data, 'cái hình hiện tại là cái này', data.image)
+            if (!data.imageHead) throw new Error('Could not parse image metadata');
+            return new Promise(
+                function (resolve) {
+                    data.image.toBlob(function (blob) {
+                        data.blob = blob;
+                        let imgblob1 = new Image();
+                        imgblob1.src = URL.createObjectURL(data.blob);
+                        document.querySelector(id1).appendChild(imgblob1);
+                        resolve(data);
+                    }, 'image/jpeg');
+                });
+        })
+        .then(function (data) {
+            console.log('hình sau khi xử lý ', data);
+            // let imageBlob = loadImage.replaceHead(data.blob, data.imageHead);
+            let imageBlob2 = new Image();
+            imageBlob2.src = URL.createObjectURL(data.blob);
+            document.querySelector(id2).appendChild(imageBlob2);
+            return loadImage.replaceHead(data.blob, data.imageHead);
+        })
+        .then(function (blob) {
+            // do something with the new Blob object
+            console.log('cái hình kiểu blob', blob)
+            var imageBlob = new Image();
+            imageBlob.src = URL.createObjectURL(blob);
+            document.querySelector(id3).appendChild(imageBlob);
+        })
+        .catch(function (err) {
+            console.error(err)
+        });
+}
+
+/**
+ * 
+ * @param {*} imgFile cho vào một cái file đọc lên từ folder hoặc máy ảnh
+ * @returns trả về từ cái blob
+ */
+const processImgOnMobilev1_3 = async function (imgFile) {
+    return await loadImage(imgFile, { meta: true, canvas: true, orientation: 1 })
+        .then(function (data) {
+            if (!data.imageHead) throw new Error('Could not parse image metadata');
+            return new Promise(
+                function (resolve) {
+                    data.image.toBlob(function (blob) {
+                        data.blob = blob;
+                        resolve(data);
+                    }, 'image/jpeg');
+                });
+        })
+        .then(function (data) {
+            return loadImage.replaceHead(data.blob, data.imageHead);
+        })
+        .then(function (blob) {
+            // do something with the new Blob object
+            return blob
+        })
+        .catch(function (err) {
+            console.error(err, 'error process img blob');
+            return err;
+        });
+}
+
+/**
+ * 
+ * @param {*} imgFile cho vào mổ cái file hình, đọc lên từ folder hoặc máy ảnh
+ * @returns trả về một emlemt img có thể show lên giao diện luôn
+ */
+const processImgOnMobilev3 = function (imgFile) {
+    return loadImage(
+        imgFile,
+        function (img, data) {
+            if (data.imageHead && data.exif) {
+                // Reset Exif Orientation data:
+                loadImage.writeExifData(data.imageHead, data, 'Orientation', 1)
+                return img.toBlob(function (blob) {
+                    return loadImage.replaceHead(blob, data.imageHead, function (newBlob) {
+                        return newBlob;
+                    })
+                }, 'image/jpeg');
+            }
+            return img;
+        },
+        { meta: true, orientation: true, canvas: true }
+    );
+};
+
+const processImgOnMobilev4 = function (imgFile) {
+    return loadImage(
+        imgFile,
+        function (img, data) {
+            if (data.imageHead && data.exif) {
+                // Reset Exif Orientation data:
+                loadImage.writeExifData(data.imageHead, data, 'Orientation', 1)
+                return img.toBlob(function (blob) {
+                    return loadImage.replaceHead(blob, data.imageHead, function (newBlob) {
+                        // do something with newBlob
+                        return newBlob;
+                    })
+                });
+            }
+            return img;
+        },
+        { meta: true, orientation: true }
+    );
+};
+///////
+const playWithImage = (file) => {
+
+    /**
+     * 
+     */
+    processImgOnMobilev1(file);
+
+
+    /**
+     * 
+     */
+    processImgOnMobilev2(file, '#test-img-4', 800);
+
+
+    /**
+     * 
+     */
+    let unknowImgType = processImgOnMobilev3(file);
+    document.querySelector('#test-img-5').appendChild(unknowImgType);
+
+
+    /**
+     * 
+     */
+    let blpbImgAfterProcessRotated = processImgOnMobilev1_3(file);
+    let imageFromBlobAfterProcess = new Image();
+    imageFromBlobAfterProcess.src = URL.createObjectURL(blpbImgAfterProcessRotated);
+    document.querySelector('#test-img-6').appendChild(imageFromBlobAfterProcess);
+
+}
+
+
+////
+function blobToFile(theBlob, fileName) {
+    theBlob.lastModifiedDate = new Date();
+    theBlob.name = fileName;
+    return theBlob;
+}
+const getBlobFromELment = async (elementFile) => {
+    let _src = elementFile.src;
+    let blob = await fetch(_src)
+        .then((res) => res.blob())
+        .then((myBlob) => {
+            console.log('blob lấy dược từ element in promise');
+            console.log(myBlob);
+            // logs: Blob { size: 1024, type: "image/jpeg" }
+            return myBlob;
+        });
+    return blob;
+}
+
+const convertBlobToBase64 = blob => new Promise((resolve, reject) => {
+    const reader = new FileReader;
+    reader.onerror = reject;
+    reader.onload = () => {
+        resolve(reader.result);
+    };
+    reader.readAsDataURL(blob);
+});
+
+const showImgGeneral = (listFile, idShow = '#slide-img-box') => {
+    let htmlSlideBox = '<div class="owl-carousel d-flex owl-theme">'
+    for (let i = 0; i < listFile.length; i++) {
+        htmlSlideBox += `<div>
+                                    <img class="col-12 p-0 img-sub" src="${URL.createObjectURL(listFile[i])}" alt="target image">
+                                </div>`;
+    }
+    htmlSlideBox += '</div>';
+    $(idShow).html(htmlSlideBox);
+    $(`${idShow}>.owl-carousel`).owlCarousel({
+        responsive: {
+            nav: true,
+            center: true,
+            loop: false,
+            0: {
+                items: 1
+            },
+            600: {
+                items: 1
+            },
+            1000: {
+                items: 1
+            }
+        }
+    });
+}
+
 $(function () {
     const corePath = window.navigator.userAgent.indexOf("Edge") > -1
         ? '/javascripts/provider/tesseract-core.asm.js'
@@ -11,6 +248,14 @@ $(function () {
 
     $(document).on('change', '#file-1', async (e) => {
         if (e.target.files.length > 0) {
+            //==============start test process stu img=================
+            // processImgOnMobilev1(e.target.files[0]);
+            // let img5Blob = processImgOnMobilev2(e.target.files[0], '#test-img-4', 800);
+            // document.querySelector('#test-img-5').appendChild(img5Blob);
+            // ==========end test process stu img============================
+
+            // console.log('kiểm tra các trường hợp',);
+            // processImgOnMobilev3();
             /*
             // let filename1 = $('input[type=file]').val().split('\\').pop();
             // let filename2 = $('input[type=file]').val().replace(/C:\\fakepath\\/i, '')
@@ -20,49 +265,31 @@ $(function () {
             $('#sub-image-extracted').empty();
             if (e.target.files.length > 1) {
                 let formImage = new FormData();
+
                 for (let i = 0; i < e.target.files.length; i++) {
                     formImage.append(`image${i}`, e.target.files[i]);
                 }
                 emitData = formImage;
-                let htmlSlideBox = '<div class="owl-carousel d-flex owl-theme">'
-                for (let i = 0; i < e.target.files.length; i++) {
-                    htmlSlideBox += `<div>
-                                    <img class="col-12 p-0 img-sub" src="${URL.createObjectURL(e.target.files[i])}" alt="target image">
-                                </div>`;
-                }
-                htmlSlideBox += '</div>';
-                $('#slide-img-box').html(htmlSlideBox);
-                $("#slide-img-box>.owl-carousel").owlCarousel({
-                    responsive: {
-                        nav: true,
-                        center: true,
-                        loop: false,
-                        0: {
-                            items: 1
-                        },
-                        600: {
-                            items: 1
-                        },
-                        1000: {
-                            items: 1
-                        }
-                    }
-                });
-
-
+                showImgGeneral(e.target.files, '#slide-img-box');
             } else {
                 var htmlOneNew = `<div id='img-box'>
-                 <img id="selected-image" class="col-12 p-0" src="---null" alt="target image"/>
-            </div>`;
+                                        <img id="selected-image" class="col-12 p-0" src="---null" alt="target image"/>
+                                    </div>`;
                 $('#slide-img-box').html(htmlOneNew);
-                let file = e.target.files[0];
-                let dataFiles = new FormData();
-                dataFiles.append('image', file);
                 const selectedImage = document.getElementById('selected-image');
+                file = e.target.files[0];
                 if (file) {
                     selectedImage.src = URL.createObjectURL(file);
                 }
+                let dataFiles = new FormData();
+                dataFiles.append('image', file);
                 emitData = dataFiles;
+
+
+
+                // playWithImage(e.target.files[0]);
+
+
             }
 
             $("#arrow-right").removeClass("fa-arrow-right");
@@ -80,15 +307,15 @@ $(function () {
             // 192.168.1.5
             //'https://nobugnocode.com/api/test',
             //'http://127.0.0.1:5000/api/test',
-            //'http://175.41.143.61/api/test',
-
+            //'http://175.41.143.61/api/test',\
             $.ajax({
                 type: "POST",
-                // headers: { 'Access-Control-Allow-Origin': '*' },
-                url: 'http://175.41.143.61/api/predict',
+                headers: { 'Access-Control-Allow-Origin': '*' },
+                url: 'http://127.0.0.1:5000/api/predict',
                 data: emitData,
                 contentType: false,
                 processData: false,
+                crossDomain: true,
                 dataType: 'json',
                 success: (data) => {
                     getResultToStore(data).then((data) => {
@@ -222,7 +449,7 @@ $(function () {
             if (imgWithBox) {
                 for (const img of imgWithBox) {
                     htmlSlideBox += `<div>
-                                                <img class="col-12 p-0 img-sub" src="data:image/jpeg;base64, ${img}" alt="target image">
+                                            <img class="col-12 p-0 img-sub" src="data:image/jpeg;base64, ${img}" alt="target image">
                                         </div>`;
                 }
                 resultToStored['imgResult'] = imgWithBox;
@@ -337,13 +564,6 @@ $(function () {
 
                     linePrice = linePrice[0].text.split(' ');
                     price = linePrice[linePrice.length - 1];
-
-                    // textStandard = {
-                    //     'item name': nameItem,
-                    //     'price': price,
-                    //     'line price': linePrice
-                    // }
-                    // textStandard = nameItem + 'Price is: ' + price;
                     textStandard = nameItem;
 
                 }
@@ -352,11 +572,8 @@ $(function () {
                 let rs = processStatus(packet, label, idShowLog, idShow);
                 // console.log('tại sao mà mày cứ dồn cục lại vậy', rs, label);
                 // listResult.push(rs);
-
-
                 return rs;
             } catch (err) {
-
                 alertify.notify(`Here some unexpected exceptions occurred, because the image is too small, the image is noisy. Response => ${err}`, 'Reload page to solve', 'warning', 15);
             }
         }))
