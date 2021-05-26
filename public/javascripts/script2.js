@@ -43,7 +43,7 @@ const processImgOnMobilev2 = function (imgFile, idShowImg, maxWidthImg) {
 const processImgOnMobilev1 = function (imgFile, id1 = '#test-img-1', id2 = '#test-img-2', id3 = '#test-img-3') {
     loadImage(imgFile, { meta: true, canvas: true, maxWidth: 800, orientation: 1 })
         .then(function (data) {
-            console.log('hình qua xử lý lần1', data, 'cái hình hiện tại là cái này', data.image)
+            // console.log('hình qua xử lý lần1', data, 'cái hình hiện tại là cái này', data.image)
             if (!data.imageHead) throw new Error('Could not parse image metadata');
             return new Promise(
                 function (resolve) {
@@ -57,7 +57,7 @@ const processImgOnMobilev1 = function (imgFile, id1 = '#test-img-1', id2 = '#tes
                 });
         })
         .then(function (data) {
-            console.log('hình sau khi xử lý ', data);
+            // console.log('hình sau khi xử lý ', data);
             // let imageBlob = loadImage.replaceHead(data.blob, data.imageHead);
             let imageBlob2 = new Image();
             imageBlob2.src = URL.createObjectURL(data.blob);
@@ -66,7 +66,7 @@ const processImgOnMobilev1 = function (imgFile, id1 = '#test-img-1', id2 = '#tes
         })
         .then(function (blob) {
             // do something with the new Blob object
-            console.log('cái hình kiểu blob', blob)
+            // console.log('cái hình kiểu blob', blob)
             var imageBlob = new Image();
             imageBlob.src = URL.createObjectURL(blob);
             document.querySelector(id3).appendChild(imageBlob);
@@ -193,8 +193,8 @@ const getBlobFromELment = async (elementFile) => {
     let blob = await fetch(_src)
         .then((res) => res.blob())
         .then((myBlob) => {
-            console.log('blob lấy dược từ element in promise');
-            console.log(myBlob);
+            // console.log('blob lấy dược từ element in promise');
+            // console.log(myBlob);
             // logs: Blob { size: 1024, type: "image/jpeg" }
             return myBlob;
         });
@@ -416,7 +416,7 @@ $(function () {
                 },
                 error: (err) => {
                     // console.log('requets predict thất bại', err); // //important
-                    alertify.notify(`Requets predict thất bại failed`, 'error', 15);
+                    alertify.notify(`Requets predict failed`, 'error', 15);
                     $('#file-1').prop('disabled', false);
                 }
             });
@@ -426,7 +426,7 @@ $(function () {
 
     let getResultToStore = async (data) => {
         if (data.error) {
-            alertify.notify(`do not extract. Reload page to solve`, 'error', 15);
+            alertify.notify(`Do not extract. Reload page to solve`, 'error', 15);
             return;
         }
         let resultToStored = {}
