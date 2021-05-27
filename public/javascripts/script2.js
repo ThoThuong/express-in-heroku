@@ -847,12 +847,12 @@ $(function () {
             dataType: 'json',
             success: (res) => {
                 // console.log(res); //important
-                alertify.notify(`Deleted. Reload page to solve`, 'success', 15);
+                alertify.notify(`Deleted.`, 'success', 15);
                 $(`#inv-item-${idDel}`).remove();
                 location.reload();
             },
             error: (err) => {
-                alertify.notify(`do not delete. Reload page to solve`, 'error', 15);
+                alertify.notify(`Do not delete. Reload page to solve`, 'error', 15);
                 // console.log(err);  //important
             }
         })

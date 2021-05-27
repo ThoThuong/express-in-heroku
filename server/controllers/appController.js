@@ -89,12 +89,17 @@ exports.createInvoice = async (req, res) => {
         console.log(acc._id);
         let accountId = acc._id;
         // const imgBase64 = imageResult[0].replace(/^data:image\/png;base64,/, "");
-        let imgBase64 = imageResult[0];
-        imgBase64 = imgBase64.split('base64,').pop();
+        // let imgBase64 = imageResult[0];
+        // imgBase64 = imgBase64.split('base64,').pop();
 
-        s3Upload.uploadFilev2(imgBase64, accountId, 'imageResult').then(s3Respon => {
+        s3Upload.uploadFilev2(imageResult, accountId, 'imageResult').then(s3Respon => {
+            let listLink = [];
+            if (s3Respon[0]) {
+                listLink = s3Respon.map(ele => ele.location);
+            }
             data['idOwner'] = accountId;
-            data['imageResult'] = s3Respon.location ? s3Respon.location : imageResult[0];
+            // data['imageResult'] = s3Respon.location ? s3Respon.location : imageResult[0];
+            data['imageResult'] = listLink;
             let invoice = new invoices(data);
             invoice
                 .save(invoice)

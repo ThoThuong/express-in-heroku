@@ -1,6 +1,13 @@
 extends layout
 
 block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+
+  //- h2= error.status
+  //- pre #{error.stack}
+  .container.bg-light.shadow.rounded.pt-5
+    h1= message
+    section.row 
+      .col-12.w-100.d-flex.flex-row.justify-content-center
+        img.w-50(src='/images/code-error.svg')
+
+
