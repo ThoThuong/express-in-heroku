@@ -16,7 +16,7 @@ router.post('/', landing.submit_email);// tesst
 // router.post('/api/users', middlwareAuthen.authen, controller.create);
 // router.get('/api/users', middlwareAuthen.authen, controller.find);
 // router.post('/api/update-info-user', middlwareAuthen.authen, controller.updateInfoUser);
-router.post('/api/update-info-user', controller.updateInfoUser);
+router.post('/api/update-info-user',middlwareAuthen.authen, controller.updateInfoUser);
 // router.delete('/api/users/:id', middlwareAuthen.authen, controller.delete);
 
 

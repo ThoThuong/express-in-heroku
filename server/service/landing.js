@@ -66,24 +66,26 @@ exports.renderListInvoice = async (req, res, next) => {
     let idcp = acc._id;
     // const listInvoice = await invoice.find({ idOwner: idcp });
     console.log(idcp)
-    let perPage = 5; // số lượng sản phẩm xuất hiện trên 1 page
+    let perPage = 2; // số lượng sản phẩm xuất hiện trên 1 page
     let page = req.params.pageNumber || 1;
     invoice
-        .find({ idOwner: idcp }) // find tất cả các data
+        .find({ "idOwner": idcp }) // find tất cả các data
         .skip((perPage * page) - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
         .limit(perPage)
         .exec((err, invoices) => {
-            invoice.countDocuments((err, count) => { // đếm để tính có bao nhiêu trang
-                if (err) return next(err);
-                // res.send(products) // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
-                res.render('invoices', {
-                    list: invoices, // sản phẩm trên một page
-                    current: page, // page hiện tại
-                    pages: perPage >= count ? 1 : Math.ceil(count / perPage), // tổng số các page
-                    totalInvoice: invoices.length
+            invoice
+                .find({ "idOwner": idcp }).countDocuments((err, count) => { // đếm để tính có bao nhiêu trang
+                    if (err) return next(err);
+                    // res.send(products) // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+
+                    res.render('invoices', {
+                        list: invoices, // sản phẩm trên một page
+                        current: page, // page hiện tại
+                        pages: Math.ceil(count / perPage), // tổng số các page
+                        totalInvoice: count
+                    });
+                    // return res.render('invoices', { list: listInvoice });
                 });
-                // return res.render('invoices', { list: listInvoice });
-            });
         });
 
 

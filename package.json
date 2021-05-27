@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "postshrinkwrap": "rm -f package-lock.json",
-    "start": "node ./bin/www",
+    "start": "nodemon ./bin/www",
     "start-prod": "node ./bin/www"
   },
   "dependencies": {
