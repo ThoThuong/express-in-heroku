@@ -791,9 +791,15 @@ $(function () {
                                 success: (res) => {
                                     alert('done', res);
                                     $('#file-1').prop('disabled', false);
+                                    $("#arrow-right").removeClass('fa-spinner fa-spin');
+                                    $("#arrow-right").addClass('fa-check');
+                                    $("#arrow-right").css('color', 'blue')
                                 },
                                 error: (err) => {
                                     // console.log('tạo hóa đơn thất bại', err);  //important
+                                    $("#arrow-right").removeClass('fa-spinner fa-spin');
+                                    $("#arrow-right").addClass('fa-times');
+                                    $("#arrow-right").css('color', 'red')
                                     alertify.notify(`create info invoice failed`, 'error', 15);
                                     $('#file-1').prop('disabled', false);
                                 }
@@ -803,7 +809,7 @@ $(function () {
                             // console.log('request xử lý trích xuất thất bại', err);  //important
                             $("#arrow-right").removeClass('fa-spinner fa-spin');
                             $("#arrow-right").addClass('fa-times');
-                            $("#arrow-right").css('color', 'red')
+                            $("#arrow-right").css('color', 'red');
                             alertify.notify(`Extract failed`, 'error', 15);
                             console.log(err);
                             $('#file-1').prop('disabled', false);
@@ -1212,7 +1218,7 @@ $(function () {
         $('#sub-image-extracted .owl-carousel .owl-stage-outer').removeClass('customCARO').addClass('customCARO');
         $("#arrow-right").removeClass('fa-spinner fa-spin');
         $("#arrow-right").addClass('fa-check');
-        $("#arrow-right").css('color', 'blue')
+        $("#arrow-right").css('color', 'blue');
 
         $('#content-pro-add').text('');
         return resultToStored;
