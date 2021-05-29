@@ -702,7 +702,7 @@ $(function () {
                 $.ajax({
                     type: "POST",
                     headers: { 'Access-Control-Allow-Origin': '*' },
-                    url: 'http://17.41.143.61/api/predict',
+                    url: 'http://175.41.143.61/api/predict',
                     data: dataToFlask,
                     contentType: false,
                     processData: false,
@@ -806,7 +806,8 @@ $(function () {
                         });
                     },
                     error: (err) => {
-                        console.log('requets predict thất bại', err); // //important
+                        // <i class="fas fa-unlink"></i>
+                        // console.log('requets predict thất bại', err); // //important
                         alertify.notify(`Requets predict failed`, 'error', 15);
                         $('#file-1').prop('disabled', false);
                     }
