@@ -691,6 +691,7 @@ $(function () {
                 dataToFlask.append('img', dataToFlaskJson);
                 $("#arrow-right").removeClass("fa-arrow-right");
                 $("#arrow-right").addClass("fa-spinner fa-spin");
+                $("#arrow-right").css('color', 'black')
                 $("#arrow-down").removeClass("fa-arrow-down");
                 $("#arrow-down").addClass("fa-spinner fa-spin");
                 $('#content-pro-add').text(`Recognizing Object`);
@@ -800,14 +801,20 @@ $(function () {
 
                         }).catch(err => {
                             // console.log('request xử lý trích xuất thất bại', err);  //important
-                            alertify.notify(`Predict request failed`, 'error', 15);
+                            $("#arrow-right").removeClass('fa-spinner fa-spin');
+                            $("#arrow-right").addClass('fa-times');
+                            $("#arrow-right").css('color', 'red')
+                            alertify.notify(`Extract failed`, 'error', 15);
                             console.log(err);
                             $('#file-1').prop('disabled', false);
                         });
                     },
                     error: (err) => {
-                        // <i class="fas fa-unlink"></i>
+                        // <i class="fas fa-times"></i>
                         // console.log('requets predict thất bại', err); // //important
+                        $("#arrow-right").removeClass('fa-spinner fa-spin');
+                        $("#arrow-right").addClass('fa-times');
+                        $("#arrow-right").css('color', 'red')
                         alertify.notify(`Requets predict failed`, 'error', 15);
                         $('#file-1').prop('disabled', false);
                     }
@@ -1205,6 +1212,8 @@ $(function () {
         $('#sub-image-extracted .owl-carousel .owl-stage-outer').removeClass('customCARO').addClass('customCARO');
         $("#arrow-right").removeClass('fa-spinner fa-spin');
         $("#arrow-right").addClass('fa-check');
+        $("#arrow-right").css('color', 'blue')
+
         $('#content-pro-add').text('');
         return resultToStored;
     }
