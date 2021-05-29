@@ -317,8 +317,8 @@ $(function () {
             },
             cropend: function (e) {
                 // console.log(e.type, e.detail.action);
-                console.log(e, 'ấn cropp');
-                alert('cropper')
+                // console.log(e, 'ấn cropp');
+                // alert('cropper')
                 // // console.log(e, 'dongs modal day nha');
                 // let fileb64 = $("#getCroppedCanvasModal")
                 //     .modal()
