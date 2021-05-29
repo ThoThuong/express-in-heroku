@@ -558,7 +558,7 @@ $(function () {
                             items: 4
                         },
                         1000: {
-                            items: 4
+                            items: 5
                         }
                     }
                 });
@@ -664,6 +664,7 @@ $(function () {
                 let dataToFlaskJson = {
                     'img': images
                 }
+                dataToFlaskJson = JSON.stringify(dataToFlaskJson);
                 let dataToFlask = new FormData();
                 dataToFlask.append('img', dataToFlaskJson);
                 $("#arrow-right").removeClass("fa-arrow-right");
@@ -675,10 +676,11 @@ $(function () {
                 $('#detail-show').html('');
                 $('#total-show').html('');
                 $('#address-show').html('')
+                //http://17.41.143.61/api/predict
                 $.ajax({
                     type: "POST",
                     headers: { 'Access-Control-Allow-Origin': '*' },
-                    url: 'http://17.41.143.61/api/predict',
+                    url: 'http://127.0.0.1:5000/api/predict',
                     data: dataToFlask,
                     contentType: false,
                     processData: false,
@@ -1226,7 +1228,7 @@ $(function () {
         return data;
     };
 
-    let startExtractInfoV2 = async (listFile, idShow, label, idShowLog = "log-all-in-one") => {
+    let startExtractInfoV2 = async (listFile, idShow, label, idShowLog = "#log-all-in-one") => {
         labelLanguage = $("#langsel").val();
         listResult = [];
         let data = await Promise.all(listFile.map(async (file) => {

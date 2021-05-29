@@ -20,12 +20,12 @@ block content
                     h3 Welcome to Deeplearning Bill extract
             main
                 .container
+                    //- .row
+                    //-     .col-md-6
+                    //-         #my-list-img.shadow.rounded
+                    //-             .owl-carousel#add-img-before-process.   
                     .row
-                        .col-md-12
-                            #my-list-img.shadow.rounded
-                                .owl-carousel#add-img-before-process.   
-                    .row
-                        .col-md-12
+                        .col-md-6
                             .docs-demo
                                 .img-container
                                     img.cropper-hidden(src="/images/test.png" alt="Picture")
@@ -53,6 +53,9 @@ block content
                                             span.cropper-point.point-nw(data-cropper-action="nw")
                                             span.cropper-point.point-sw(data-cropper-action="sw")
                                             span.cropper-point.point-se(data-cropper-action="se")
+                        .col-md-6
+                            #my-list-img.shadow.rounded
+                                .owl-carousel#add-img-before-process. 
                     .row#actions
                         .col-md-12.docs-buttons
                             .btn-group
