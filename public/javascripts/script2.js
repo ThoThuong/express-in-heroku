@@ -317,6 +317,28 @@ $(function () {
             },
             cropend: function (e) {
                 // console.log(e.type, e.detail.action);
+                console.log(e, 'ấn cropp');
+                alert('cropper')
+                // // console.log(e, 'dongs modal day nha');
+                // let fileb64 = $("#getCroppedCanvasModal")
+                //     .modal()
+                //     .find(".modal-body > img").attr('file-base64')
+                // console.log('lisst hieenj taoj', currentFiles);
+                // // console.log(uploadedImageName, 'iamge on cropper');
+                // currentFilesONP = { ...currentFiles };
+                // currentFilesONP[uploadedImageName] = fileb64;
+                // // console.log(currentFilesONP, uploadedImageName, 'sau khi thay doi');
+                // let images = await Promise.all(
+                //     Object.values(currentFilesONP).map(
+                //         async (ele) => {
+                //             let isBase64 = Object.prototype.toString.call(ele) === "[object String]";
+                //             if (!isBase64) {
+                //                 ele = await fileToBase64(ele);
+                //             }
+                //             return ele;
+                //         })
+                // ).then(ele => ele);
+                // showImgGeneralBase64(images);
             },
             crop: function (e) {
                 // var data = e.detail;
@@ -1180,8 +1202,8 @@ $(function () {
         }
         $("#sub-image-extracted>.owl-carousel").addClass('flex-column')
         $('#sub-image-extracted .owl-carousel .owl-stage-outer').removeClass('customCARO').addClass('customCARO');
-        $(".fas").removeClass('fa-spinner fa-spin');
-        $(".fas").addClass('fa-check');
+        $("#arrow-right").removeClass('fa-spinner fa-spin');
+        $("#arrow-right").addClass('fa-check');
         $('#content-pro-add').text('');
         return resultToStored;
     }

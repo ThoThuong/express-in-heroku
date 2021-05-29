@@ -110,7 +110,7 @@ block content
                                 button.btn.btn-primary(type="button" data-method="reset" title="Reset")
                                     span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.reset()")
                                         span.fa.fa-sync-alt
-                                label.btn.btn-primary.btn-upload(for="inputImage" title="Upload image file").d-flex
+                                label.btn.btn-danger.btn-upload(for="inputImage" title="Upload image file").d-flex
                                     input.sr-only#inputImage(type="file" name="file-1[]" data-multiple-caption="{count} files selected", multiple, accept="image/*")
                                     span.docs-tooltip(data-toggle="tooltip" data-original-title="Import image with Blob URLs")
                                         span.fa.fa-upload
@@ -123,8 +123,8 @@ block content
                                         span.fa.fa-power-off
                             .btn-group.btn-group-crop
                                 button.btn.btn-success(type="button" data-method="getCroppedCanvas" data-target="#getCroppedCanvasModal" data-option="{ \"maxWidth\": 4096, \"maxHeight\": 4096 }")
-                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.getCroppedCanvas({ maxWidth: 4096, maxHeight: 4096 })").
-                                        Preview Cropped
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.getCroppedCanvas({ maxWidth: 4096, maxHeight: 4096 })") Preview Cropped
+                                        i.fas.fa-crop(style="margin: 0 1rem;")
 
                 .container.py-5
                     .row
