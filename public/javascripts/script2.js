@@ -636,12 +636,12 @@ $(function () {
     };
 
     //
-    $(document).on('change', '#file-1', async (e) => {
-        let listFile = e.target.files;
-        let apiPredict = 'http://17.41.143.61/api/predict';
-        apiPredict = 'http://127.0.0.1:5000/api/predict';
-        onStartForExtract(listFile, apiPredict);
-    });
+    // $(document).on('change', '#file-1', async (e) => {
+    //     let listFile = e.target.files;
+    //     let apiPredict = 'http://17.41.143.61/api/predict';
+    //     apiPredict = 'http://127.0.0.1:5000/api/predict';
+    //     onStartForExtract(listFile, apiPredict);
+    // });
     $('#core-app-predict').on('click', async (e) => {
         e.preventDefault();
         // e.stopPropagation();
