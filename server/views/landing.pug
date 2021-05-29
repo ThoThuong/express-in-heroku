@@ -62,7 +62,7 @@ block content
                                 button.btn.btn-primary(type="button" data-method="setDragMode" data-option="move" title="Move")
                                     span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.setDragMode(\"move\")")
                                         span.fa.fa-arrows-alt
-                                button.btn.btn-primary(type="button" data-method="setDragMode" data-option="crop" title="Crop")
+                                button.btn.btn-primary#instance-crop(type="button" data-method="setDragMode" data-option="crop" title="Crop")
                                     span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.setDragMode(\"crop\")")
                                         span.fa.fa-crop-alt
                             .btn-group
@@ -87,10 +87,10 @@ block content
                                         span.fa.fa-arrow-down
                             .btn-group
                                 button.btn.btn-primary(type="button" data-method="rotate" data-option="-1" title="Rotate Left")
-                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.rotate(5)")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.rotate(-1)")
                                         span.fa.fa-undo-alt
                                 button.btn.btn-primary(type="button" data-method="rotate" data-option="1" title="Rotate Right")
-                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.rotate(5)")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.rotate(1)")
                                         span.fa.fa-redo-alt
                             .btn-group
                                 button.btn.btn-primary(type="button" data-method="scaleX" data-option="-1" title="Flip Horizontal")

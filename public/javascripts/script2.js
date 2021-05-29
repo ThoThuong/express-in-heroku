@@ -432,6 +432,7 @@ $(function () {
                     case "getCroppedCanvas":
                         try {
                             data.option = JSON.parse(data.option);
+
                         } catch (e) {
                             console.log(e.message);
                         }
@@ -477,10 +478,12 @@ $(function () {
                             }
                         } else {
                             window.alert("Please give me your images!");
+
                         }
 
 
                         break;
+
 
                     case "destroy":
                         cropper = null;
@@ -503,7 +506,19 @@ $(function () {
                 }
             }
 
+            // $('#instance-crop').on('click', async () => {
+            //     if (Object.keys(currentFiles)[0]) {
+            //         console.log(cropper[data.method](data.option, data.secondOption), 'hình');
+            //         let blobIMG = await fetch(result.toDataURL(uploadedImageType))
+            //             .then(res => res.blob());
+            //         console.log(uploadedImageName, 'iamge on cropper');
+            //         console.log('có blob hình không', blobIMG);
 
+
+            //     } else {
+            //         window.alert('Please give me your images')
+            //     }
+            // });
         };
 
         // Import image
@@ -513,8 +528,8 @@ $(function () {
             inputImage.onchange = function () {
 
                 showMultiImage(this.files);
-                showImgGeneral(this.files);
-                processOnLoadImage(this.files);
+                showImgGeneral(Object.values(currentFilesONP));
+                processOnLoadImage(Object.values(currentFilesONP));
 
 
             };
@@ -548,8 +563,11 @@ $(function () {
             }
         }
 
+
+        // one
         function showMultiImage(listfile) {
             if (listfile.length) {
+                currentFiles = {};
                 $('#add-img-before-process').empty();
                 let htmlSlideBox = '<div class="owl-carousel d-flex owl-theme" style="flex-direction: column;">';
                 for (let i = 0; i < listfile.length; i++) {
@@ -559,6 +577,7 @@ $(function () {
                                     <img style="width:50px; height:50px;" class="col-12 p-0 img-sub" src="${URL.createObjectURL(listfile[i])}" alt="target image" />
                              </div>`;
                         currentFiles[id_img] = listfile[i];
+
                     } else {
                         window.alert("Please choose an image file.");
                     }
@@ -566,7 +585,7 @@ $(function () {
                 }
                 currentFilesONP = { ...currentFiles };
                 htmlSlideBox += '</div>';
-                console.log(htmlSlideBox, 'cái div');
+                // console.log(htmlSlideBox, 'cái div');
                 $('#my-list-img').html(htmlSlideBox);
                 $('#my-list-img > .owl-carousel').owlCarousel({
                     responsive: {
@@ -585,7 +604,7 @@ $(function () {
                     }
                 });
 
-                console.log(currentFiles, 'cái list ở dât');
+                // console.log(currentFiles, 'cái list ở dât');
             }
 
         }
@@ -598,8 +617,9 @@ $(function () {
         }
 
 
+        // two
         $(document).on('click', '#my-list-img .owl-item .shadown', (e) => {
-            console.log('click on ', e.target);
+            // console.log('click on ', e.target);
             seletecImgProcess(e.target);
             let imgOnEdit = $(e.target).parent().attr('id-img') ? $(e.target).parent().attr('id-img') : $(e.target).attr('id-img');
             let file = currentFiles[imgOnEdit];
@@ -616,6 +636,7 @@ $(function () {
                 cropper = new Cropper(image, options);
                 inputImage.value = null;
             }
+
 
         });
 
@@ -636,7 +657,7 @@ $(function () {
             let fileb64 = $("#getCroppedCanvasModal")
                 .modal()
                 .find(".modal-body > img").attr('file-base64')
-            console.log('lisst hieenj taoj', currentFiles);
+            // console.log('lisst hieenj taoj', currentFiles);
             // console.log(uploadedImageName, 'iamge on cropper');
             currentFilesONP = { ...currentFiles };
             currentFilesONP[uploadedImageName] = fileb64;
@@ -655,6 +676,7 @@ $(function () {
         })
 
 
+
     };
 
     //
@@ -667,11 +689,12 @@ $(function () {
     $('#core-app-predict').on('click', async (e) => {
         e.preventDefault();
         // e.stopPropagation();
-        if (Object.keys(currentFiles)[0]) {
+        if (Object.keys(currentFilesONP)[0]) {
             let isConfirm = window.confirm('Make sure your image is the most accurate?\nHãy chắc chắn rằng hình ảnh của bạn chuẩn xác nhất?');
-            console.log(isConfirm, 'xác nhận để tiến hành predict');
+            // console.log(isConfirm, 'xác nhận để tiến hành predict');
             if (isConfirm) {
                 // console.log(currentFilesONP, 'predict đi');
+                // console.log('nhung file hiện tại ở dây', currentFilesONP);
                 let images = await Promise.all(
                     Object.values(currentFilesONP).map(
                         async (ele) => {
@@ -710,7 +733,7 @@ $(function () {
                     crossDomain: true,
                     dataType: 'json',
                     success: (data) => {
-                        console.log(data, 'dataBase trả về rồi đây');
+                        // console.log(data, 'dataBase trả về rồi đây');
                         getResultToStoreV2(data).then((data) => {
                             const { address, datetime, item, total, imgResult } = data;
                             // console.log('sai từ ở đây', data); // //important
@@ -735,13 +758,7 @@ $(function () {
                                 });
                             }
 
-                            let totalSave = [''];
-                            if (total) {
-                                console.log(total, 'sao mà cứ bị hoài vậy')
-                                totalSave = total.map(ele => {
-                                    return Object.values(ele)[0];
-                                });
-                            }
+
 
                             let imgResultSave = '';
                             if (imgResult) {
@@ -749,9 +766,18 @@ $(function () {
                                     return `data:image/jpeg;base64, ${ele}`;
                                 });
                             }
+
+
+
+
                             totalUniq = '';
-                            if (totalSave[0].length > 0) {
-                                totalUniq = convertMoney(totalSave[0]);
+                            try {
+                                totalUniq = total.map(ele => Object.values(ele)[0]) ? total.map(ele => Object.values(ele)[0]) : ''
+                                totalUniq = convertMoney(totalUniq) ? convertMoney(totalUniq) : '';
+
+                            } catch (error) {
+                                // console.log(error);
+                                totalUniq = '';
                             }
 
 
@@ -763,13 +789,10 @@ $(function () {
                             if (dConvert) {
                                 ddt = new Date(dConvert);
                             }
-
-
-
                             if (!isValidDate(ddt)) {
                                 ddt = moment(dConvert, 'DD/MM/YYYY').toDate();
                             }
-
+                            // console.log(totalUniq, ddt);
                             let dataEmit = {
                                 'address': addressSave[0] ?? '',
                                 'datetime': ddt ?? new Date(),
@@ -811,7 +834,7 @@ $(function () {
                             $("#arrow-right").addClass('fa-times');
                             $("#arrow-right").css('color', 'red');
                             alertify.notify(`Extract failed`, 'error', 15);
-                            console.log(err);
+                            // console.log(err);
                             $('#file-1').prop('disabled', false);
                         });
                     },
@@ -910,7 +933,7 @@ $(function () {
 
                         let totalSave = [''];
                         if (total) {
-                            console.log(total, 'sao mà cứ bị hoài vậy')
+                            // console.log(total, 'sao mà cứ bị hoài vậy')
                             totalSave = total.map(ele => {
                                 return Object.values(ele)[0];
                             });
@@ -986,7 +1009,7 @@ $(function () {
                     }).catch(err => {
                         // console.log('request xử lý trích xuất thất bại', err);  //important
                         alertify.notify(`Predict request failed`, 'error', 15);
-                        console.log(err);
+                        // console.log(err);
                         $('#file-1').prop('disabled', false);
                     });
                 },
@@ -1143,6 +1166,7 @@ $(function () {
                                         </div>`;
                 }
                 resultToStored['imgResult'] = imgWithBox;
+                currentFilesONP = { ...currentFiles };
             }
             htmlSlideBox += '</div>';
             $('#slide-img-box').html(htmlSlideBox);
