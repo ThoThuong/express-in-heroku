@@ -1,6 +1,17 @@
 extends layout
 
 block content
+    .modal.fade.docs-cropped#getCroppedCanvasModal(role="dialog" aria-hidden="true" aria-labelledby="getCroppedCanvasTitle" tabindex="-1")
+        .modal-dialog(role="document")
+            .modal-content
+                .modal-header
+                    h5.modal-title#getCroppedCanvasTitle Cropped
+                    button.close(type="button" data-dismiss="modal" aria-label="Close")
+                        span(aria-hidden="true") ×
+                .modal-body
+                .modal-footer
+                    button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
+                    button.btn.btn-secondary#confirm-getimg(type="button" data-dismiss="modal") Cropp
     div#wraper
         div.container.shadown.bg-light.shadow.rounded.py-3
             header
@@ -8,6 +19,110 @@ block content
                     h2=title 
                     h3 Welcome to Deeplearning Bill extract
             main
+                .container
+                    .row
+                        .col-md-12
+                            #my-list-img.shadow.rounded
+                                .owl-carousel#add-img-before-process.   
+                    .row
+                        .col-md-12
+                            .docs-demo
+                                .img-container
+                                    img.cropper-hidden(src="/images/test.png" alt="Picture")
+                                    .cropper-container.cropper-bg(touch-action="none" style="width: 821px; height: 497px;")
+                                        .cropper-wrap-box
+                                        .cropper-canvas(style="width: 821px; height: 461.812px; transform: translateY(17.5938px);")
+                                            img.cropper-hide(src="/images/test.png" alt="Picture" style="width: 821px; height: 461.812px; transform: translateY(2.84217e-14px);")
+                                        .cropper-drag-box.cropper-crop.cropper-modal(data-cropper-action="crop")
+                                        .cropper-crop-box(style="width: 656.8px; height: 369.45px; transform: translateX(82.1px) translateY(63.775px);")
+                                            span.cropper-view-box
+                                                img(src="/images/test.png" alt="Picture" style="width: 821px; height: 461.812px; transform: translateX(-82.1px) translateY(-46.1812px);")
+                                            span.cropper-dashed.dashed-h
+                                            span.cropper-dashed.dashed-v
+                                            span.cropper-center
+                                            span.cropper-face.cropper-move(data-cropper-action="all")
+                                            span.cropper-line.line-e(data-cropper-action="e")
+                                            span.cropper-line.line-n(data-cropper-action="n")
+                                            span.cropper-line.line-w(data-cropper-action="w")
+                                            span.cropper-line.line-s(data-cropper-action="s")
+                                            span.cropper-point.point-e(data-cropper-action="e")
+                                            span.cropper-point.point-n(data-cropper-action="n")
+                                            span.cropper-point.point-w(data-cropper-action="w")
+                                            span.cropper-point.point-s(data-cropper-action="s")
+                                            span.cropper-point.point-ne(data-cropper-action="ne")
+                                            span.cropper-point.point-nw(data-cropper-action="nw")
+                                            span.cropper-point.point-sw(data-cropper-action="sw")
+                                            span.cropper-point.point-se(data-cropper-action="se")
+                    .row#actions
+                        .col-md-12.docs-buttons
+                            .btn-group
+                                button.btn.btn-primary(type="button" data-method="setDragMode" data-option="move" title="Move")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.setDragMode(\"move\")")
+                                        span.fa.fa-arrows-alt
+                                button.btn.btn-primary(type="button" data-method="setDragMode" data-option="crop" title="Crop")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.setDragMode(\"crop\")")
+                                        span.fa.fa-crop-alt
+                            .btn-group
+                                button.btn.btn-primary(type="button" data-method="zoom" data-option="0.1" title="Zoom In")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.zoom(0.1)")
+                                        span.fa.fa-search-plus
+                                button.btn.btn-primary(type="button" data-method="zoom" data-option="-0.1" title="Zoom Out")
+                                    span.docs-tooltip(data-toggle="tooltip", s, data-original-title="cropper.zoom(-0.1)")
+                                        span.fa.fa-search-minus
+                            .btn-group
+                                button.btn.btn-primary(type="button" data-method="move" data-option="-10" data-second-option="0" title="Move Left")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.move(-10, 0)")
+                                        span.fa.fa-arrow-left
+                                button.btn.btn-primary(type="button" data-method="move" data-option="10" data-second-option="0" title="Move Right")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.move(10, 0)")
+                                        span.fa.fa-arrow-right
+                                button.btn.btn-primary(type="button" data-method="move" data-option="0" data-second-option="-10" title="Move Up")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.move(0, -10)")
+                                        span.fa.fa-arrow-up
+                                button.btn.btn-primary(type="button" data-method="move" data-option="0" data-second-option="10" title="Move Down")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.move(0, 10)")
+                                        span.fa.fa-arrow-down
+                            .btn-group
+                                button.btn.btn-primary(type="button" data-method="rotate" data-option="-1" title="Rotate Left")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.rotate(5)")
+                                        span.fa.fa-undo-alt
+                                button.btn.btn-primary(type="button" data-method="rotate" data-option="1" title="Rotate Right")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.rotate(5)")
+                                        span.fa.fa-redo-alt
+                            .btn-group
+                                button.btn.btn-primary(type="button" data-method="scaleX" data-option="-1" title="Flip Horizontal")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.scaleX(-1)")
+                                        span.fa.fa-arrows-alt-h
+                                button.btn.btn-primary(type="button" data-method="scaleY" data-option="-1" title="Flip Vertical")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.scaleY(-1)")
+                                        span.fa.fa-arrows-alt-v
+                            .btn-group
+                                button.btn.btn-primary(type="button" data-method="crop" title="Crop")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.crop()")
+                                        span.fa.fa-check
+                                button.btn.btn-primary(type="button" data-method="clear" title="Clear")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.clear()")
+                                        span.fa.fa-times
+                            .btn-group
+                                button.btn.btn-primary(type="button" data-method="reset" title="Reset")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.reset()")
+                                        span.fa.fa-sync-alt
+                                label.btn.btn-primary.btn-upload(for="inputImage" title="Upload image file").d-flex
+                                    input.sr-only#inputImage(type="file" name="file-1[]" data-multiple-caption="{count} files selected", multiple, accept="image/*")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="Import image with Blob URLs")
+                                        span.fa.fa-upload
+                                    span.mx-2
+                                        |or 
+                                    span 
+                                        i.fas.fa-camera
+                                button.btn.btn-primary(type="button" data-method="destroy" title="Destroy")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.destroy()")
+                                        span.fa.fa-power-off
+                            .btn-group.btn-group-crop
+                                button.btn.btn-success(type="button" data-method="getCroppedCanvas" data-target="#getCroppedCanvasModal" data-option="{ \"maxWidth\": 4096, \"maxHeight\": 4096 }")
+                                    span.docs-tooltip(data-toggle="tooltip" data-original-title="cropper.getCroppedCanvas({ maxWidth: 4096, maxHeight: 4096 })").
+                                        Preview Cropped
+
                 .container.py-5
                     .row
                         .col-12.col-md-6
@@ -29,6 +144,10 @@ block content
                                         svg(xmlns='http://www.w3.org/2000/svg' width='20' height='17' viewbox='0 0 20 17')
                                             path(d='M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z')
                                         span Choose a file or take image&mldr;
+                                    button.btn.btn-outline-primary#core-app-predict 
+                                        span(style="margin:0 1rem; font-weight:bold;") Predict
+                                        i.fab.fa-wpexplorer
+
                     .row.mt-5
                         .col-12.col-md-5.border.pb-3
                             h3 General:
@@ -63,6 +182,8 @@ block content
                                                 #log-date-time
                                                 #log-detail.pl-md-2.w-sm-100
                                                 #log-total.pl-md-2.w-sm-100
+                                            .d-flex.justify-content-center.flex-md-nowrap.flex-sm-wrap#log-pro
+                                                #log-all-in-one
                                 .col-12
                                     .row 
                                         .col
@@ -95,4 +216,13 @@ block content
                                         .col-12
                                             #test
                                                 img
+
+
+
+
+
+
+
+
+
 

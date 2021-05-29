@@ -1,0 +1,32 @@
+#add-img-before-process {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+
+.owl-item>div {
+    position: relative;
+    margin: 0.5rem;
+}
+
+.img-on-selected {
+    /* border: 1px solid red;
+    position: relative; */
+
+}
+
+#img-on-selected-custome {
+    position: absolute;
+}
+
+/* #my-list-img button.owl-next>span,
+#my-list-img button.owl-prev>span {
+    display: none !important;
+} */
+
+#my-list-img .owl-nav.disabled {
+    display: none;
+}
