@@ -295,254 +295,335 @@ $(function () {
 
 
     //phần xử lý crop image
-    window.onload = function () {
-        "use strict";
-        var Cropper = window.Cropper;
-        var URL = window.URL || window.webkitURL;
-        var container = document.querySelector(".img-container");
-        var image = container.getElementsByTagName("img").item(0);
-        var actions = document.getElementById("actions");
+    if (document.querySelector(".img-container")) {
+        window.onload = function () {
+            "use strict";
+            var Cropper = window.Cropper;
+            var URL = window.URL || window.webkitURL;
+            var container = document.querySelector(".img-container");
+            var image = container.getElementsByTagName("img").item(0);
+            var actions = document.getElementById("actions");
 
-        var options = {
-            aspectRatio: NaN,
-            preview: ".img-preview",
-            ready: function (e) {
-                console.log(e.type);
-            },
-            cropstart: function (e) {
-                // console.log(e.type, e.detail.action);
-            },
-            cropmove: function (e) {
-                // console.log(e.type, e.detail.action);
-            },
-            cropend: function (e) {
-                // console.log(e.type, e.detail.action);
-                // console.log(e, 'ấn cropp');
-                // alert('cropper')
-                // // console.log(e, 'dongs modal day nha');
-                // let fileb64 = $("#getCroppedCanvasModal")
-                //     .modal()
-                //     .find(".modal-body > img").attr('file-base64')
-                // console.log('lisst hieenj taoj', currentFiles);
-                // // console.log(uploadedImageName, 'iamge on cropper');
-                // currentFilesONP = { ...currentFiles };
-                // currentFilesONP[uploadedImageName] = fileb64;
-                // // console.log(currentFilesONP, uploadedImageName, 'sau khi thay doi');
-                // let images = await Promise.all(
-                //     Object.values(currentFilesONP).map(
-                //         async (ele) => {
-                //             let isBase64 = Object.prototype.toString.call(ele) === "[object String]";
-                //             if (!isBase64) {
-                //                 ele = await fileToBase64(ele);
-                //             }
-                //             return ele;
-                //         })
-                // ).then(ele => ele);
-                // showImgGeneralBase64(images);
-            },
-            crop: function (e) {
-                // var data = e.detail;
-            },
-            zoom: function (e) {
-                // console.log(e.type, e.detail.ratio);
-            },
-        };
+            var options = {
+                aspectRatio: NaN,
+                preview: ".img-preview",
+                ready: function (e) {
+                    console.log(e.type);
+                },
+                cropstart: function (e) {
+                    // console.log(e.type, e.detail.action);
+                },
+                cropmove: function (e) {
+                    // console.log(e.type, e.detail.action);
+                },
+                cropend: function (e) {
+                    // console.log(e.type, e.detail.action);
+                    // console.log(e, 'ấn cropp');
+                    // alert('cropper')
+                    // // console.log(e, 'dongs modal day nha');
+                    // let fileb64 = $("#getCroppedCanvasModal")
+                    //     .modal()
+                    //     .find(".modal-body > img").attr('file-base64')
+                    // console.log('lisst hieenj taoj', currentFiles);
+                    // // console.log(uploadedImageName, 'iamge on cropper');
+                    // currentFilesONP = { ...currentFiles };
+                    // currentFilesONP[uploadedImageName] = fileb64;
+                    // // console.log(currentFilesONP, uploadedImageName, 'sau khi thay doi');
+                    // let images = await Promise.all(
+                    //     Object.values(currentFilesONP).map(
+                    //         async (ele) => {
+                    //             let isBase64 = Object.prototype.toString.call(ele) === "[object String]";
+                    //             if (!isBase64) {
+                    //                 ele = await fileToBase64(ele);
+                    //             }
+                    //             return ele;
+                    //         })
+                    // ).then(ele => ele);
+                    // showImgGeneralBase64(images);
+                },
+                crop: function (e) {
+                    // var data = e.detail;
+                },
+                zoom: function (e) {
+                    // console.log(e.type, e.detail.ratio);
+                },
+            };
 
-        var cropper = new Cropper(image, options);  //biến Windown năm giữu cropper có hình cà oprion dẻ config
-        var originalImageURL = image.src;
-        var uploadedImageType = "image/jpeg";
-        var uploadedImageName = "cropped.jpg";
-        var uploadedImageURL;
+            var cropper = new Cropper(image, options);  //biến Windown năm giữu cropper có hình cà oprion dẻ config
+            var originalImageURL = image.src;
+            var uploadedImageType = "image/jpeg";
+            var uploadedImageName = "cropped.jpg";
+            var uploadedImageURL;
 
-        // Tooltip
-        $('[data-toggle="tooltip"]').tooltip();
+            // Tooltip
+            $('[data-toggle="tooltip"]').tooltip();
 
-        // Buttons
-        if (!document.createElement("canvas").getContext) {
-            $('button[data-method="getCroppedCanvas"]').prop("disabled", true);
-        }
-
-        if (
-            typeof document.createElement("cropper").style.transition === "undefined"
-        ) {
-            $('button[data-method="rotate"]').prop("disabled", true);
-            $('button[data-method="scale"]').prop("disabled", true);
-        }
-        // Methods
-        actions.querySelector(".docs-buttons").onclick = async function (event) {
-            var e = event || window.event;
-            var target = e.target || e.srcElement;
-            var cropped;
-            var result;
-            var input;
-            var data;
-
-            if (!cropper) {
-                return;
-            }
-
-            while (target !== this) {
-
-                if (target.getAttribute("data-method")) {
-                    break;
-                }
-
-                target = target.parentNode;
+            // Buttons
+            if (!document.createElement("canvas").getContext) {
+                $('button[data-method="getCroppedCanvas"]').prop("disabled", true);
             }
 
             if (
-                target === this ||
-                target.disabled ||
-                target.className.indexOf("disabled") > -1
+                typeof document.createElement("cropper").style.transition === "undefined"
             ) {
-                return;
+                $('button[data-method="rotate"]').prop("disabled", true);
+                $('button[data-method="scale"]').prop("disabled", true);
             }
+            // Methods
+            actions.querySelector(".docs-buttons").onclick = async function (event) {
+                var e = event || window.event;
+                var target = e.target || e.srcElement;
+                var cropped;
+                var result;
+                var input;
+                var data;
 
-            data = {
-                method: target.getAttribute("data-method"),
-                target: target.getAttribute("data-target"),
-                option: target.getAttribute("data-option") || undefined,
-                secondOption: target.getAttribute("data-second-option") || undefined,
-            };
+                if (!cropper) {
+                    return;
+                }
 
-            cropped = cropper.cropped;
+                while (target !== this) {
 
-            if (data.method) {
+                    if (target.getAttribute("data-method")) {
+                        break;
+                    }
 
-                if (typeof data.target !== "undefined") {
-                    input = document.querySelector(data.target);
+                    target = target.parentNode;
+                }
 
-                    if (!target.hasAttribute("data-option") && data.target && input) {
+                if (
+                    target === this ||
+                    target.disabled ||
+                    target.className.indexOf("disabled") > -1
+                ) {
+                    return;
+                }
+
+                data = {
+                    method: target.getAttribute("data-method"),
+                    target: target.getAttribute("data-target"),
+                    option: target.getAttribute("data-option") || undefined,
+                    secondOption: target.getAttribute("data-second-option") || undefined,
+                };
+
+                cropped = cropper.cropped;
+
+                if (data.method) {
+
+                    if (typeof data.target !== "undefined") {
+                        input = document.querySelector(data.target);
+
+                        if (!target.hasAttribute("data-option") && data.target && input) {
+                            try {
+                                data.option = JSON.parse(input.value);
+                            } catch (e) {
+                                console.log(e.message);
+                            }
+                        }
+                    }
+
+                    switch (data.method) {
+                        case "rotate":
+                            if (cropped && options.viewMode > 0) {
+                                cropper.clear();
+                            }
+
+                            break;
+
+                        case "getCroppedCanvas":
+                            try {
+                                data.option = JSON.parse(data.option);
+
+                            } catch (e) {
+                                console.log(e.message);
+                            }
+
+                            if (uploadedImageType === "image/jpeg") {
+                                if (!data.option) {
+                                    data.option = {};
+                                }
+
+                                data.option.fillColor = "#fff";
+                            }
+
+                            break;
+                    }
+
+                    result = cropper[data.method](data.option, data.secondOption);
+
+                    switch (data.method) {
+                        case "rotate":
+                            if (cropped && options.viewMode > 0) {
+                                cropper.crop();
+                            }
+
+                            break;
+
+                        case "scaleX":
+                        case "scaleY":
+                            target.setAttribute("data-option", -data.option);
+                            break;
+
+                        case "getCroppedCanvas":
+                            if (Object.keys(currentFiles)[0]) {
+                                if (result) {
+                                    let blobIMG = await fetch(result.toDataURL(uploadedImageType))
+                                        .then(res => res.blob());
+                                    // console.log($('.icon-selected'), 'csai icon day roi');
+                                    let IMGFROMBLOB = `<img src='${URL.createObjectURL(blobIMG)}' file-base64=${result.toDataURL(uploadedImageType)} name-file-base64=${uploadedImageName}/>`;
+                                    $("#getCroppedCanvasModal")
+                                        .modal()
+                                        .find(".modal-body")
+                                        .html(IMGFROMBLOB);
+                                    // console.log(uploadedImageName, 'iamge on cropper');
+                                }
+                            } else {
+                                window.alert("Please give me your images!");
+
+                            }
+
+
+                            break;
+
+
+                        case "destroy":
+                            cropper = null;
+
+                            if (uploadedImageURL) {
+                                URL.revokeObjectURL(uploadedImageURL);
+                                uploadedImageURL = "";
+                                image.src = originalImageURL;
+                            }
+                            location.reload();
+                            break;
+                    }
+
+                    if (typeof result === "object" && result !== cropper && input) {
                         try {
-                            data.option = JSON.parse(input.value);
+                            input.value = JSON.stringify(result);
                         } catch (e) {
                             console.log(e.message);
                         }
                     }
                 }
 
-                switch (data.method) {
-                    case "rotate":
-                        if (cropped && options.viewMode > 0) {
-                            cropper.clear();
-                        }
-
-                        break;
-
-                    case "getCroppedCanvas":
-                        try {
-                            data.option = JSON.parse(data.option);
-
-                        } catch (e) {
-                            console.log(e.message);
-                        }
-
-                        if (uploadedImageType === "image/jpeg") {
-                            if (!data.option) {
-                                data.option = {};
-                            }
-
-                            data.option.fillColor = "#fff";
-                        }
-
-                        break;
-                }
-
-                result = cropper[data.method](data.option, data.secondOption);
-
-                switch (data.method) {
-                    case "rotate":
-                        if (cropped && options.viewMode > 0) {
-                            cropper.crop();
-                        }
-
-                        break;
-
-                    case "scaleX":
-                    case "scaleY":
-                        target.setAttribute("data-option", -data.option);
-                        break;
-
-                    case "getCroppedCanvas":
-                        if (Object.keys(currentFiles)[0]) {
-                            if (result) {
-                                let blobIMG = await fetch(result.toDataURL(uploadedImageType))
-                                    .then(res => res.blob());
-                                // console.log($('.icon-selected'), 'csai icon day roi');
-                                let IMGFROMBLOB = `<img src='${URL.createObjectURL(blobIMG)}' file-base64=${result.toDataURL(uploadedImageType)} name-file-base64=${uploadedImageName}/>`;
-                                $("#getCroppedCanvasModal")
-                                    .modal()
-                                    .find(".modal-body")
-                                    .html(IMGFROMBLOB);
-                                // console.log(uploadedImageName, 'iamge on cropper');
-                            }
-                        } else {
-                            window.alert("Please give me your images!");
-
-                        }
+                // $('#instance-crop').on('click', async () => {
+                //     if (Object.keys(currentFiles)[0]) {
+                //         console.log(cropper[data.method](data.option, data.secondOption), 'hình');
+                //         let blobIMG = await fetch(result.toDataURL(uploadedImageType))
+                //             .then(res => res.blob());
+                //         console.log(uploadedImageName, 'iamge on cropper');
+                //         console.log('có blob hình không', blobIMG);
 
 
-                        break;
+                //     } else {
+                //         window.alert('Please give me your images')
+                //     }
+                // });
+            };
+
+            // Import image
+            var inputImage = document.getElementById("inputImage");
+
+            if (URL) {
+                inputImage.onchange = function () {
+
+                    showMultiImage(this.files);
+                    showImgGeneral(Object.values(currentFilesONP));
+                    processOnLoadImage(Object.values(currentFilesONP));
 
 
-                    case "destroy":
-                        cropper = null;
+                };
+            } else {
+                inputImage.disabled = true;
+                inputImage.parentNode.className += " disabled";
+            }
 
+            function processOnLoadImage(listfile) {
+                var files = listfile;
+                var file;
+                if (files && files.length) {
+                    file = files[0];
+                    if (/^image\/\w+/.test(file.type)) {
+                        uploadedImageType = file.type;
+                        uploadedImageName = file.name;
                         if (uploadedImageURL) {
                             URL.revokeObjectURL(uploadedImageURL);
-                            uploadedImageURL = "";
-                            image.src = originalImageURL;
                         }
-                        location.reload();
-                        break;
-                }
+                        image.src = uploadedImageURL = URL.createObjectURL(file);
+                        if (cropper) {
+                            cropper.destroy();
+                        }
+                        cropper = new Cropper(image, options);
+                        inputImage.value = null;
 
-                if (typeof result === "object" && result !== cropper && input) {
-                    try {
-                        input.value = JSON.stringify(result);
-                    } catch (e) {
-                        console.log(e.message);
+                    } else {
+                        window.alert("Please choose an image file.");
                     }
+
                 }
             }
 
-            // $('#instance-crop').on('click', async () => {
-            //     if (Object.keys(currentFiles)[0]) {
-            //         console.log(cropper[data.method](data.option, data.secondOption), 'hình');
-            //         let blobIMG = await fetch(result.toDataURL(uploadedImageType))
-            //             .then(res => res.blob());
-            //         console.log(uploadedImageName, 'iamge on cropper');
-            //         console.log('có blob hình không', blobIMG);
+
+            // one
+            function showMultiImage(listfile) {
+                if (listfile.length) {
+                    currentFiles = {};
+                    $('#add-img-before-process').empty();
+                    let htmlSlideBox = '<div class="owl-carousel d-flex owl-theme" style="flex-direction: column;">';
+                    for (let i = 0; i < listfile.length; i++) {
+                        if (/^image\/\w+/.test(listfile[i].type)) {
+                            let id_img = `${listfile[i].name}`;
+                            htmlSlideBox += `<div id-img="${id_img}" class="shadown rounded btn btn-outline-success">
+                                    <img style="width:50px; height:50px;" class="col-12 p-0 img-sub" src="${URL.createObjectURL(listfile[i])}" alt="target image" />
+                             </div>`;
+                            currentFiles[id_img] = listfile[i];
+
+                        } else {
+                            window.alert("Please choose an image file.");
+                        }
+
+                    }
+                    currentFilesONP = { ...currentFiles };
+                    htmlSlideBox += '</div>';
+                    // console.log(htmlSlideBox, 'cái div');
+                    $('#my-list-img').html(htmlSlideBox);
+                    $('#my-list-img > .owl-carousel').owlCarousel({
+                        responsive: {
+                            nav: true,
+                            center: true,
+                            loop: false,
+                            0: {
+                                items: 3
+                            },
+                            600: {
+                                items: 4
+                            },
+                            1000: {
+                                items: 5
+                            }
+                        }
+                    });
+
+                    // console.log(currentFiles, 'cái list ở dât');
+                }
+
+            }
 
 
-            //     } else {
-            //         window.alert('Please give me your images')
-            //     }
-            // });
-        };
-
-        // Import image
-        var inputImage = document.getElementById("inputImage");
-
-        if (URL) {
-            inputImage.onchange = function () {
-
-                showMultiImage(this.files);
-                showImgGeneral(Object.values(currentFilesONP));
-                processOnLoadImage(Object.values(currentFilesONP));
+            function setAttributes(el, attrs) {
+                for (var key in attrs) {
+                    el.setAttribute(key, attrs[key]);
+                }
+            }
 
 
-            };
-        } else {
-            inputImage.disabled = true;
-            inputImage.parentNode.className += " disabled";
-        }
-
-        function processOnLoadImage(listfile) {
-            var files = listfile;
-            var file;
-            if (files && files.length) {
-                file = files[0];
+            // two
+            $(document).on('click', '#my-list-img .owl-item .shadown', (e) => {
+                // console.log('click on ', e.target);
+                seletecImgProcess(e.target);
+                let imgOnEdit = $(e.target).parent().attr('id-img') ? $(e.target).parent().attr('id-img') : $(e.target).attr('id-img');
+                let file = currentFiles[imgOnEdit];
                 if (/^image\/\w+/.test(file.type)) {
                     uploadedImageType = file.type;
                     uploadedImageName = file.name;
@@ -555,130 +636,50 @@ $(function () {
                     }
                     cropper = new Cropper(image, options);
                     inputImage.value = null;
-
-                } else {
-                    window.alert("Please choose an image file.");
                 }
 
-            }
-        }
+
+            });
 
 
-        // one
-        function showMultiImage(listfile) {
-            if (listfile.length) {
-                currentFiles = {};
-                $('#add-img-before-process').empty();
-                let htmlSlideBox = '<div class="owl-carousel d-flex owl-theme" style="flex-direction: column;">';
-                for (let i = 0; i < listfile.length; i++) {
-                    if (/^image\/\w+/.test(listfile[i].type)) {
-                        let id_img = `${listfile[i].name}`;
-                        htmlSlideBox += `<div id-img="${id_img}" class="shadown rounded btn btn-outline-success">
-                                    <img style="width:50px; height:50px;" class="col-12 p-0 img-sub" src="${URL.createObjectURL(listfile[i])}" alt="target image" />
-                             </div>`;
-                        currentFiles[id_img] = listfile[i];
-
-                    } else {
-                        window.alert("Please choose an image file.");
-                    }
-
-                }
-                currentFilesONP = { ...currentFiles };
-                htmlSlideBox += '</div>';
-                // console.log(htmlSlideBox, 'cái div');
-                $('#my-list-img').html(htmlSlideBox);
-                $('#my-list-img > .owl-carousel').owlCarousel({
-                    responsive: {
-                        nav: true,
-                        center: true,
-                        loop: false,
-                        0: {
-                            items: 3
-                        },
-                        600: {
-                            items: 4
-                        },
-                        1000: {
-                            items: 5
-                        }
-                    }
-                });
-
-                // console.log(currentFiles, 'cái list ở dât');
-            }
-
-        }
-
-
-        function setAttributes(el, attrs) {
-            for (var key in attrs) {
-                el.setAttribute(key, attrs[key]);
-            }
-        }
-
-
-        // two
-        $(document).on('click', '#my-list-img .owl-item .shadown', (e) => {
-            // console.log('click on ', e.target);
-            seletecImgProcess(e.target);
-            let imgOnEdit = $(e.target).parent().attr('id-img') ? $(e.target).parent().attr('id-img') : $(e.target).attr('id-img');
-            let file = currentFiles[imgOnEdit];
-            if (/^image\/\w+/.test(file.type)) {
-                uploadedImageType = file.type;
-                uploadedImageName = file.name;
-                if (uploadedImageURL) {
-                    URL.revokeObjectURL(uploadedImageURL);
-                }
-                image.src = uploadedImageURL = URL.createObjectURL(file);
-                if (cropper) {
-                    cropper.destroy();
-                }
-                cropper = new Cropper(image, options);
-                inputImage.value = null;
-            }
-
-
-        });
-
-
-        function seletecImgProcess(select) {
-            $('.icon-selected') ? $('.icon-selected').remove() : $('.icon-selected');
-            $(select).parent().css({ 'position': 'none;' });
-            let iconSelect = `<div class="icon-selected" style="position: absolute; top:30%;left:45%">
+            function seletecImgProcess(select) {
+                $('.icon-selected') ? $('.icon-selected').remove() : $('.icon-selected');
+                $(select).parent().css({ 'position': 'none;' });
+                let iconSelect = `<div class="icon-selected" style="position: absolute; top:30%;left:45%">
                                     <i class="fas fa-clipboard-check" style="color:green; font-site:2rem"> </i>
                                 </div>`;
-            $(select).parent().css({ 'position': 'relative;' });
-            $(select).parent().append(iconSelect)
-        }
+                $(select).parent().css({ 'position': 'relative;' });
+                $(select).parent().append(iconSelect)
+            }
 
 
-        $('#confirm-getimg').on('click', async (e) => {
-            // console.log(e, 'dongs modal day nha');
-            let fileb64 = $("#getCroppedCanvasModal")
-                .modal()
-                .find(".modal-body > img").attr('file-base64')
-            // console.log('lisst hieenj taoj', currentFiles);
-            // console.log(uploadedImageName, 'iamge on cropper');
-            currentFilesONP = { ...currentFiles };
-            currentFilesONP[uploadedImageName] = fileb64;
-            // console.log(currentFilesONP, uploadedImageName, 'sau khi thay doi');
-            let images = await Promise.all(
-                Object.values(currentFilesONP).map(
-                    async (ele) => {
-                        let isBase64 = Object.prototype.toString.call(ele) === "[object String]";
-                        if (!isBase64) {
-                            ele = await fileToBase64(ele);
-                        }
-                        return ele;
-                    })
-            ).then(ele => ele);
-            showImgGeneralBase64(images);
-        })
+            $('#confirm-getimg').on('click', async (e) => {
+                // console.log(e, 'dongs modal day nha');
+                let fileb64 = $("#getCroppedCanvasModal")
+                    .modal()
+                    .find(".modal-body > img").attr('file-base64')
+                // console.log('lisst hieenj taoj', currentFiles);
+                // console.log(uploadedImageName, 'iamge on cropper');
+                currentFilesONP = { ...currentFiles };
+                currentFilesONP[uploadedImageName] = fileb64;
+                // console.log(currentFilesONP, uploadedImageName, 'sau khi thay doi');
+                let images = await Promise.all(
+                    Object.values(currentFilesONP).map(
+                        async (ele) => {
+                            let isBase64 = Object.prototype.toString.call(ele) === "[object String]";
+                            if (!isBase64) {
+                                ele = await fileToBase64(ele);
+                            }
+                            return ele;
+                        })
+                ).then(ele => ele);
+                showImgGeneralBase64(images);
+            })
 
 
 
-    };
-
+        };
+    }
     //
     // $(document).on('change', '#file-1', async (e) => {
     //     let listFile = e.target.files;
@@ -722,11 +723,13 @@ $(function () {
                 $('#detail-show').html('');
                 $('#total-show').html('');
                 $('#address-show').html('')
-                //http://17.41.143.61/api/predict
+                // 
+
+                // 'http://175.41.143.61/api/predict'
                 $.ajax({
                     type: "POST",
                     headers: { 'Access-Control-Allow-Origin': '*' },
-                    url: 'http://175.41.143.61/api/predict',
+                    url: 'http://127.0.0.1:5000/api/predict',
                     data: dataToFlask,
                     contentType: false,
                     processData: false,
@@ -1478,7 +1481,7 @@ $(function () {
     };
 
     let showResultExtract = (line, idShow, label, texts) => {
-
+        console.log(line, texts, 'check extract bill');
         const dataCurrent = new Object();
         dataCurrent[label] = texts;
         result = `<p style="font-size: 1.5rem; line-height: 1.2; font-weight: 500; color:#343343">${texts}<p>`
@@ -1486,7 +1489,7 @@ $(function () {
         switch (label) {
             case "DateTime":
                 result = `<p style="font-size: 1.5rem; line-height: 1.2; font-weight: 500; color:#343343">
-                            ${convertDateTime(texts)}
+                            ${convertDateTime(texts) ? convertDateTime(texts) : texts}
                            <p>`
                 // result = `<p style="font-size: 1.5rem; line-height: 1.2; font-weight: 500; color:#343343">
                 //            convert from  ${convertDateTime(texts)}
