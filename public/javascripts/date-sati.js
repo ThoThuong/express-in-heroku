@@ -98,7 +98,7 @@ $(document).ready(function () {
 });
 $(document).on('click', '#sati', (e) => {
     e.preventDefault();
-    // alert('ok');
+    alert('ok');
     data = $('#loggerTxt> div').attr('dataD');
     data = data.split('==');
     dateFrom = moment(data[0]).format('L');

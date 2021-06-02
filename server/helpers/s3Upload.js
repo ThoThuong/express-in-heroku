@@ -1,8 +1,8 @@
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const AWS = require('aws-sdk');
-const ID = '===================';
-const SECRET = '================';
+const ID = 'AKIA43BSGHY57UQKHPGY';
+const SECRET = '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';
 const BUCKET_NAME = 'ocr-flask-nodejs';
 const s3 = new AWS.S3({
     accessKeyId: ID,
