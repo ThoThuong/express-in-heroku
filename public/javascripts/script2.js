@@ -771,17 +771,19 @@ $(function () {
                             }
 
 
-
+                            // console.log(total, 'total nhan dc');
 
                             totalUniq = '';
                             try {
                                 totalUniq = total.map(ele => Object.values(ele)[0]) ? total.map(ele => Object.values(ele)[0]) : ''
-                                totalUniq = convertMoney(totalUniq) ? convertMoney(totalUniq) : '';
+                                totalUniq = convertMoney(totalUniq[0]) ? convertMoney(totalUniq[0]) : '';
 
                             } catch (error) {
                                 // console.log(error);
                                 totalUniq = '';
                             }
+
+                            // console.log('tại sao total lại null', totalUniq);
 
 
                             let dConvert;
